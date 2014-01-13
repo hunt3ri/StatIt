@@ -1,5 +1,5 @@
 # git ignore file
-packages*
+packages/*
 *.suo
 */bin/*
 */obj/*
