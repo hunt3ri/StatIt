@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DistimoPassword" xml:space="preserve">
-    <value />
+    <value>digital01</value>
   </data>
   <data name="DistimoPrivateKey" xml:space="preserve">
-    <value />
+    <value>b10e8f590d0a10947813f6348e62f4501b538ff7</value>
   </data>
   <data name="DistimoPublicKey" xml:space="preserve">
-    <value />
+    <value>7d3db217a2e848c70f33ea83f7e005582dadd110</value>
   </data>
   <data name="DistimoUserName" xml:space="preserve">
-    <value />
+    <value>catherine@tsumanga.com</value>
   </data>
 </root>

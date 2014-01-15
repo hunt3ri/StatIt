@@ -61,7 +61,7 @@ namespace StatIt.Engine {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to digital01.
         /// </summary>
         internal static string DistimoPassword {
             get {
@@ -70,7 +70,7 @@ namespace StatIt.Engine {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to b10e8f590d0a10947813f6348e62f4501b538ff7.
         /// </summary>
         internal static string DistimoPrivateKey {
             get {
@@ -79,7 +79,7 @@ namespace StatIt.Engine {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to 7d3db217a2e848c70f33ea83f7e005582dadd110.
         /// </summary>
         internal static string DistimoPublicKey {
             get {
@@ -88,7 +88,7 @@ namespace StatIt.Engine {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to catherine@tsumanga.com.
         /// </summary>
         internal static string DistimoUserName {
             get {

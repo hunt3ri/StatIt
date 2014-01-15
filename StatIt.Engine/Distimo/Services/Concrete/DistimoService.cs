@@ -16,14 +16,17 @@ namespace StatIt.Engine.Distimo.Services.Concrete
         private static string QueryFormat = "format=json";
         private static string DownloadAPI = DistimoAPIAddress + "downloads";
 
-        private static string DistimoPrivateKey = "";
-        private static string DistimoPublicKey = "";
-        private static string DistimoUserName = ""; 
-        private static string DistimoPassword = ""; 
+        private static string DistimoPrivateKey;
+        private static string DistimoPublicKey;
+        private static string DistimoUserName; 
+        private static string DistimoPassword; 
 
         public DistimoService()
         {
             DistimoPrivateKey = APIKeys.DistimoPrivateKey;
+            DistimoPublicKey = APIKeys.DistimoPublicKey;
+            DistimoUserName = APIKeys.DistimoUserName;
+            DistimoPassword = APIKeys.DistimoPassword;
         }
 
         public void GetDownloads()
