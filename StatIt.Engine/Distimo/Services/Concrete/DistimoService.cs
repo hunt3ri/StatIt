@@ -21,6 +21,11 @@ namespace StatIt.Engine.Distimo.Services.Concrete
         private static string DistimoUserName = ""; 
         private static string DistimoPassword = ""; 
 
+        public DistimoService()
+        {
+            DistimoPrivateKey = APIKeys.DistimoPrivateKey;
+        }
+
         public void GetDownloads()
         {
             var downloadRequest = CreateDistimoRequest(DownloadAPI, "breakdown=application,appstore&from=all");

@@ -39,10 +39,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIKeys.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>APIKeys.resx</DependentUpon>
+    </Compile>
     <Compile Include="Distimo\Models\DistimoAuthToken.cs" />
     <Compile Include="Distimo\Services\Concrete\DistimoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Concrete\WebRequestService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="APIKeys.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>APIKeys.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
