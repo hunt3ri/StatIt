@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StatIt.Engine.Distimo.Services.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +13,8 @@ namespace StatIt.Web.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
+            var test = new DistimoService();
+            test.GetDownloads();
             return View();
         }
     }
