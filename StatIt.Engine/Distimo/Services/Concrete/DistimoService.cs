@@ -1,4 +1,5 @@
 ﻿using StatIt.Engine.Distimo.Models;
+using StatIt.Engine.Distimo.Services.Abstract;
 using StatIt.Engine.Web.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace StatIt.Engine.Distimo.Services.Concrete
 {
-    public class DistimoService
+    public class DistimoService : IDistimoService
     {
         private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v3/";
         private static string QueryFormat = "format=json";

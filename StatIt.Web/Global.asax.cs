@@ -24,13 +24,20 @@ namespace StatIt.Web
             BootstrapContainer();
         }
 
+        protected void Application_End()
+        {
+            container.Dispose();
+        }
+
         /// <summary>
         /// Create a new IoC Container and set the ControllerBuilder to our custom build
         /// </summary>
         private static void BootstrapContainer()
         {
             container = new WindsorContainer()
-                .Install(FromAssembly.This());
+                .Install(FromAssembly.This())
+                .Install(FromAssembly.Named("StatIt.Engine"));
+
             var controllerFactory = new StatItControllerFactory(container.Kernel);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
