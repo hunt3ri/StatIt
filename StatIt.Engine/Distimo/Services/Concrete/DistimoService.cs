@@ -1,6 +1,6 @@
 ﻿using StatIt.Engine.Distimo.Models;
 using StatIt.Engine.Distimo.Services.Abstract;
-using StatIt.Engine.Web.Concrete;
+using StatIt.Engine.Web.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +20,14 @@ namespace StatIt.Engine.Distimo.Services.Concrete
         private static string DistimoPrivateKey;
         private static string DistimoPublicKey;
         private static string DistimoUserName; 
-        private static string DistimoPassword; 
+        private static string DistimoPassword;
 
-        public DistimoService()
+        private readonly IWebRequestService WebRequestService;
+
+        public DistimoService(IWebRequestService webRequestService)
         {
+            WebRequestService = webRequestService;
+
             DistimoPrivateKey = APIKeys.DistimoPrivateKey;
             DistimoPublicKey = APIKeys.DistimoPublicKey;
             DistimoUserName = APIKeys.DistimoUserName;
@@ -33,9 +37,8 @@ namespace StatIt.Engine.Distimo.Services.Concrete
         public void GetDownloads()
         {
             var downloadRequest = CreateDistimoRequest(DownloadAPI, "breakdown=application,appstore&from=all");
-            var service = new WebRequestService();
 
-            var downloadData = service.GetWebRequest(downloadRequest);
+            var downloadData = WebRequestService.GetWebRequest(downloadRequest);
 
           }
 

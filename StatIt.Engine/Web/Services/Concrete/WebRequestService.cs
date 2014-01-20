@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StatIt.Engine.Web.Services.Abstract;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StatIt.Engine.Web.Concrete
+namespace StatIt.Engine.Web.Services.Concrete
 {
-    public class WebRequestService
+    public class WebRequestService : IWebRequestService
     {
         public string GetWebRequest(WebRequest request)
         {

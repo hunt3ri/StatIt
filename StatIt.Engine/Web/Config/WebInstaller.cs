@@ -1,22 +1,22 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using StatIt.Engine.Distimo.Services.Abstract;
-using StatIt.Engine.Distimo.Services.Concrete;
+using StatIt.Engine.Web.Services.Abstract;
+using StatIt.Engine.Web.Services.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StatIt.Engine.Distimo.Config
+namespace StatIt.Engine.Web.Config
 {
-    public class DistimoInstaller : IWindsorInstaller
+    public class WebInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container
-                .Register(Component.For<IDistimoService>().ImplementedBy<DistimoService>());
+                .Register(Component.For<IWebRequestService>().ImplementedBy<WebRequestService>());
 
 
 
