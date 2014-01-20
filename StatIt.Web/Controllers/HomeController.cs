@@ -19,9 +19,14 @@ namespace StatIt.Web.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            DistimoService.GetDownloads();
-            //test.GetDownloads();
+            
             return View();
+        }
+
+        public JsonResult GetDownloads()
+        {
+            DistimoService.GetDownloads();
+            return new JsonResult();
         }
     }
 }
