@@ -1,8 +1,7 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using StatIt.Engine.Distimo.Services.Abstract;
-using StatIt.Engine.Distimo.Services.Concrete;
+using StatIt.Engine.Distimo.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +14,11 @@ namespace StatIt.Engine.Distimo.Config
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container
-                .Register(Component.For<IDistimoService>().ImplementedBy<DistimoService>());
 
-
-
-
-            //container.Register(Classes.FromThisAssembly()
-            //    .InNamespace("StatIt.Engine")
-            //        .WithService.DefaultInterfaces()
-            //        .LifestyleTransient());
+            container.Register(Classes.FromThisAssembly()
+                .InNamespace("StatIt.Engine.Distimo.Services")
+                    .WithService.DefaultInterfaces()
+                    .LifestyleTransient());
 
         }
     }

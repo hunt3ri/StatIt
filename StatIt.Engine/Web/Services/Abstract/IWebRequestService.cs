@@ -1,5 +1,5 @@
 ﻿using System;
-namespace StatIt.Engine.Web.Services.Abstract
+namespace StatIt.Engine.Web.Services
 {
     public interface IWebRequestService
     {

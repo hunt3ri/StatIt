@@ -1,5 +1,5 @@
 ﻿using System;
-namespace StatIt.Engine.Distimo.Services.Abstract
+namespace StatIt.Engine.Distimo.Services
 {
     public interface IDistimoService
     {

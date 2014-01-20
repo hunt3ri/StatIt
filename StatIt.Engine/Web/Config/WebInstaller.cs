@@ -1,8 +1,7 @@
 ﻿using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using StatIt.Engine.Web.Services.Abstract;
-using StatIt.Engine.Web.Services.Concrete;
+using StatIt.Engine.Web.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +14,10 @@ namespace StatIt.Engine.Web.Config
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container
-                .Register(Component.For<IWebRequestService>().ImplementedBy<WebRequestService>());
-
-
-
-
-            //container.Register(Classes.FromThisAssembly()
-            //    .InNamespace("StatIt.Engine")
-            //        .WithService.DefaultInterfaces()
-            //        .LifestyleTransient());
+            container.Register(Classes.FromThisAssembly()
+                           .InNamespace("StatIt.Engine.Web.Services")
+                               .WithService.DefaultInterfaces()
+                               .LifestyleTransient());
 
         }
     }

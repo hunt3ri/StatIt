@@ -1,6 +1,6 @@
 ﻿using StatIt.Engine.Distimo.Models;
-using StatIt.Engine.Distimo.Services.Abstract;
-using StatIt.Engine.Web.Services.Abstract;
+using StatIt.Engine.Distimo.Services;
+using StatIt.Engine.Web.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StatIt.Engine.Distimo.Services.Concrete
+namespace StatIt.Engine.Distimo.Services
 {
     public class DistimoService : IDistimoService
     {
