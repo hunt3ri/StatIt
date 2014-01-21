@@ -25,8 +25,12 @@ namespace StatIt.Web.Controllers
 
         public JsonResult GetDownloads()
         {
-            DistimoService.GetDownloads();
-            return new JsonResult();
+            var downloadData = DistimoService.GetDownloads();
+
+            var jsonData = Json(downloadData, JsonRequestBehavior.AllowGet);
+
+            return jsonData;
+            
         }
     }
 }

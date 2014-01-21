@@ -34,11 +34,13 @@ namespace StatIt.Engine.Distimo.Services
             DistimoPassword = APIKeys.DistimoPassword;
         }
 
-        public void GetDownloads()
+        public string GetDownloads()
         {
             var downloadRequest = CreateDistimoRequest(DownloadAPI, "breakdown=application,appstore&from=all");
 
             var downloadData = WebRequestService.GetWebRequest(downloadRequest);
+
+            return downloadData;
 
           }
 

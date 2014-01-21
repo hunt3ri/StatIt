@@ -5,12 +5,16 @@
 
 <h1>Hello StatIt</h1>
 
+<div id="target">
+
+</div>
+
 @section Scripts {
 <script>
-    $(document).ready(function() {
-        alert('Hello world'); 
-    });
 
+    $.getJSON('/Home/GetDownloads', function (data) {
+        $('#target').append('It woks' + data);
+    });
 
 </script>
 }
