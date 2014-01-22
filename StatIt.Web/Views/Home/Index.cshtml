@@ -50,13 +50,17 @@
                 })
             }
 
-            getAllDownloads().done(function (data) {
-                var parsedJson = JSON.parse(data);
+            function displayDownloads() {
+                getAllDownloads().done(function (data) {
+                    var parsedJson = JSON.parse(data);
+                    var iain = parsedJson.lines[0].data.application;
+                    $('#target').append('It woks' + iain);
+                }).error(function () {
+                    $('#target').append('Failed');
+                })
+            }
 
-                var iain = parsedJson.lines[0].data.application;
-
-                $('#target').append('It woks' + iain);
-            }).
+            displayDownloads();
 
         });
 
