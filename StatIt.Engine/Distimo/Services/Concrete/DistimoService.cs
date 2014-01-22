@@ -13,7 +13,7 @@ namespace StatIt.Engine.Distimo.Services
 {
     public class DistimoService : IDistimoService
     {
-        private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v3/";
+        private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v4/";
         private static string QueryFormat = "format=json";
         private static string DownloadAPI = DistimoAPIAddress + "downloads";
 
@@ -36,7 +36,7 @@ namespace StatIt.Engine.Distimo.Services
 
         public string GetDownloads()
         {
-            var downloadRequest = CreateDistimoRequest(DownloadAPI, "breakdown=application,appstore&from=all");
+            var downloadRequest = CreateDistimoRequest(DownloadAPI, "breakdown=application,appstore&from=all&view=line");
 
             var downloadData = WebRequestService.GetWebRequest(downloadRequest);
 
