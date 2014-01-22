@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "StatIt";
 }
 
@@ -10,36 +9,65 @@
 </div>
 
 @section Scripts {
-<script>
+    <script>
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        function GetDownloads()
-        {
+            //function GetDownloads()
+            //{
 
-            $.getJSON('/Home/GetDownloads', function (data) {
+            //    $.getJSON('/Home/GetDownloads', function (data) {
 
+            //        var parsedJson = JSON.parse(data);
+
+            //        var iain = parsedJson.lines[0].data.application;
+
+            //        $('#target').append('It woks' + iain);
+            //    });
+            //}
+
+            //GetDownloads();
+
+
+            //function getName(personid) {
+            //    var dynamicData = {};
+            //    dynamicData["id"] = personID;
+            //    return $.ajax({
+            //        url: "getName.php",
+            //        type: "get",
+            //        data: dynamicData
+            //    });
+            //}
+
+            //getName("2342342").done(function (data) {
+            //    // Updates the UI based the ajax result
+            //    $(".person-name").text(data.name);
+            //});
+
+            function getAllDownloads() {
+                return $.ajax({
+                    url: '/Home/GetDownloads',
+                })
+            }
+
+            getAllDownloads().done(function (data) {
                 var parsedJson = JSON.parse(data);
 
                 var iain = parsedJson.lines[0].data.application;
 
                 $('#target').append('It woks' + iain);
-            });
-        }
+            }).
 
-        GetDownloads();
-
-
-    });
+        });
 
 
-    //parsedJson
+        //parsedJson
 
-    
 
-    
 
-</script>
+
+
+    </script>
 }
 
 
