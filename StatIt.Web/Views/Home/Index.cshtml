@@ -12,14 +12,32 @@
 @section Scripts {
 <script>
 
-    $.getJSON('/Home/GetDownloads', function (data) {
+    $(document).ready(function () {
 
-        var parsedJson = JSON.parse(data);
+        function GetDownloads()
+        {
 
-        var iain = parsedJson.lines[0].data.application;
+            $.getJSON('/Home/GetDownloads', function (data) {
 
-        $('#target').append('It woks' + iain);
+                var parsedJson = JSON.parse(data);
+
+                var iain = parsedJson.lines[0].data.application;
+
+                $('#target').append('It woks' + iain);
+            });
+        }
+
+        GetDownloads();
+
+
     });
+
+
+    //parsedJson
+
+    
+
+    
 
 </script>
 }
