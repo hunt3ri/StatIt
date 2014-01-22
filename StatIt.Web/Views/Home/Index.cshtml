@@ -8,6 +8,10 @@
 
 </div>
 
+<div id="loading">
+<img src="/Content/images/ajax-loader.gif" />
+</div>
+
 <ul data-bind="foreach: downloads">
     <li>
         Application <span data-bind="text: data.application"> </span>:
@@ -23,7 +27,13 @@
                 var self = this;
                 self.downloads = ko.observableArray();
 
-                $.ajax('/Home/GetDownloads')
+                // $.ajax('/Home/GetDownloads')
+
+                $.ajax({
+                    url :       '/Home/GetDownloads',
+                    beforeSend: function () { $('#loading').show(); },
+                    complete: function () { $('#loading').hide(); }
+                })
                 .done(function (data) {
                     var parsedJson = JSON.parse(data);
                     self.downloads(parsedJson.lines);
