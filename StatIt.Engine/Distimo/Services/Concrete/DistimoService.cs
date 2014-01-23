@@ -15,7 +15,7 @@ namespace StatIt.Engine.Distimo.Services
     {
         private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v4/";
         private static string QueryFormat = "format=json";
-        private static string DownloadAPI = DistimoAPIAddress + "downloads";
+        private static string DownloadAPI = DistimoAPIAddress;
 
         private static string DistimoPrivateKey;
         private static string DistimoPublicKey;
@@ -36,13 +36,32 @@ namespace StatIt.Engine.Distimo.Services
 
         public string GetDownloads()
         {
-            var downloadRequest = CreateDistimoRequest(DownloadAPI, "breakdown=application,appstore&from=all&view=line");
+            var downloadRequest = CreateDistimoRequest(DownloadAPI + "downloads", "breakdown=application,appstore&from=all&view=line");
 
             var downloadData = WebRequestService.GetWebRequest(downloadRequest);
 
             return downloadData;
 
-          }
+        }
+
+        public string GetRevenues()
+        {
+            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=all&metric=all&revenue=total");
+
+            var revenueData = WebRequestService.GetWebRequest(revenueRequest);
+
+            return revenueData;
+        }
+
+        public string GetEvents()
+        {
+            var eventRequest = CreateDistimoRequest(DownloadAPI + "events", "from=all&types=price");
+
+            var eventData = WebRequestService.GetWebRequest(eventRequest);
+
+            return eventData;
+
+        }
 
         /// <summary>
         /// Helper method to create the appropriate Authentication Hash that Distimo expects
