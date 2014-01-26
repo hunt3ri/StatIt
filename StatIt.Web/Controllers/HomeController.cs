@@ -20,7 +20,7 @@ namespace StatIt.Web.Controllers
         public ActionResult Index()
         {
             var revenueData = DistimoService.GetRevenues();
-            var eventData = DistimoService.GetEvents();
+           // var eventData = DistimoService.GetEvents();
 
             var iain = revenueData;
             
