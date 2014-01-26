@@ -19,12 +19,23 @@ namespace StatIt.Web.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            var revenueData = DistimoService.GetRevenues();
+           
            // var eventData = DistimoService.GetEvents();
 
-            var iain = revenueData;
+           // var iain = revenueData;
             
             return View();
+        }
+
+        public JsonResult GetRevenues()
+        {
+            var queryString = Uri.UnescapeDataString(Request.QueryString.ToString());
+
+            var revenueData = DistimoService.GetRevenues(queryString);
+
+            var jsonData = Json(revenueData, JsonRequestBehavior.AllowGet);
+
+            return jsonData;
         }
 
         public JsonResult GetDownloads()

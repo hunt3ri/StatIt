@@ -5,7 +5,7 @@ namespace StatIt.Engine.Distimo.Services
     {
         string GetDownloads();
 
-        string GetRevenues();
+        string GetRevenues(string queryString);
 
         string GetEvents();
     }

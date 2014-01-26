@@ -44,9 +44,10 @@ namespace StatIt.Engine.Distimo.Services
 
         }
 
-        public string GetRevenues()
+        public string GetRevenues(string queryString)
         {
-            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=all&revenue=total&breakdown=application,appstore");
+            //"from=all&revenue=total&view=line&breakdown=application,appstore"
+            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", queryString);
 
             var revenueData = WebRequestService.GetWebRequest(revenueRequest);
 
