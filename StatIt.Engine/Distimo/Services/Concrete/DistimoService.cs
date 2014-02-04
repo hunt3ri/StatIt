@@ -1,5 +1,7 @@
-﻿using StatIt.Engine.Distimo.Models;
+﻿using JsonFx.Json;
+using StatIt.Engine.Distimo.Models;
 using StatIt.Engine.Distimo.Services;
+using StatIt.Engine.Distimo.Services.Models;
 using StatIt.Engine.Web.Services;
 using System;
 using System.Collections.Generic;
@@ -46,12 +48,131 @@ namespace StatIt.Engine.Distimo.Services
 
         public string GetRevenues(string queryString)
         {
-            //"from=all&revenue=total&view=line&breakdown=application,appstore"
-            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", queryString);
+            // from=all&revenue=total&view=line&breakdown=application,appstore
+            //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
+            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
 
             var revenueData = WebRequestService.GetWebRequest(revenueRequest);
 
+            var reader = new JsonReader();
+            dynamic output = reader.Read(revenueData);
+
+
+
+            List<dynamic> filteredList = new List<dynamic>();
+
+            foreach (dynamic line in output.lines)
+            {
+                string appName = line.data.application;
+
+                if (appName.Contains("Winx Fairy School"))
+                    filteredList.Add(line);
+            }
+
+            GetWeeklyRevenues(filteredList);
+            
             return revenueData;
+        }
+
+        public void GetWeeklyRevenues(List<dynamic> revenueList)
+        {
+            var revenueModel = new RevenueModel();
+           
+            // Get bounds for data, max number of points and oldest data point
+            foreach (dynamic item in revenueList)
+            {
+                var startDate = FromUnixTime(Convert.ToInt64(item.pointStart));
+                var AppStore = item.data.appstore;
+
+                var dataPoints = new List<int>();
+                foreach (int? i in item.points)
+                {
+                    if (i.HasValue)
+                        dataPoints.Add(i.Value);
+                }
+
+                revenueModel.UnsortedRevenues.Add(AppStore, dataPoints);
+
+                // Calculate oldest date
+                if (startDate < revenueModel.OldestDate)
+                {
+                    revenueModel.OldestDate = startDate; 
+                    revenueModel.MaxPointCount = dataPoints.Count; // Must be highest if date is oldest
+                }    
+            }
+
+            // Create ordered array
+            foreach (KeyValuePair<string, List<int>> unsortedList in revenueModel.UnsortedRevenues)
+            {
+                var orderedList = PopulateArray(revenueModel.MaxPointCount, unsortedList.Value);
+                revenueModel.StoreRevenues.Add(unsortedList.Key, orderedList);
+            }
+
+            // Populate model
+            List<RevenueChartModel> chartModel = new List<RevenueChartModel>();
+            var week = revenueModel.OldestDate;
+            
+            for (int i =0; i <= revenueModel.MaxPointCount - 1; i++)
+            {
+                var model = new RevenueChartModel() { Week = week };
+
+                foreach (KeyValuePair<string, List<int>> sortedList in revenueModel.StoreRevenues)
+                {
+                        switch (sortedList.Key)
+                        {
+                            case "Amazon Appstore":
+                                model.Amazon = sortedList.Value[i];
+                                break;
+                            case "Apple App Store":
+                                model.Apple = sortedList.Value[i];
+                                break;
+                            case "Google Play Store":
+                                model.Google = sortedList.Value[i];
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException("Unexpected appstore value");
+
+                        }
+
+                }
+
+                chartModel.Add(model);
+                week = week.AddDays(7);
+            }
+
+
+            var iain = chartModel;
+        }
+
+        public void TestRecurse()
+        {
+
+        }
+
+        public List<int> PopulateArray(int maxSize, List<int> dataPoints)
+        {
+
+            int[] test = new int[maxSize]; 
+            var dataPointCount = dataPoints.Count;
+
+            // Populate array in reverse meaning we leave a 0 for any data points that are empty.
+            for (int i = (maxSize - 1); i >= 0; --i)
+            {
+                if (dataPointCount-- == 0)
+                    break;
+
+                test[i] = dataPoints[dataPointCount];
+            }
+
+            return test.ToList();
+        }
+
+
+
+        public DateTime FromUnixTime(long unixTime)
+        {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            return epoch.AddMilliseconds(unixTime);
         }
 
         public string GetEvents()
