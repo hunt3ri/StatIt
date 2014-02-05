@@ -46,7 +46,7 @@ namespace StatIt.Engine.Distimo.Services
 
         }
 
-        public List<RevenueByWeek> GetRevenues(string queryString)
+        public RevenueModel GetRevenues(string queryString)
         {
             // from=all&revenue=total&view=line&breakdown=application,appstore
             //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
@@ -69,7 +69,9 @@ namespace StatIt.Engine.Distimo.Services
                     filteredList.Add(line);
             }
 
-            return GetWeeklyRevenues(filteredList);
+            var revenueModel = new RevenueModel();
+            revenueModel.RevenueByWeek = GetWeeklyRevenues(filteredList);
+            return revenueModel;
             
             //TODO create a more sophisticated model containing totals etc
 

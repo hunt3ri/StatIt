@@ -19,6 +19,7 @@ namespace StatIt.Web.App_Start
                      "~/Scripts/bootstrap.js",
                      "~/Scripts/respond.js",
                      "~/Scripts/knockout-3.0.0.js",
+                     "~/Scripts/globalize/globalize.js",
                      "~/Scripts/dx.chartjs.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(

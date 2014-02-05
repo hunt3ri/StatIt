@@ -51,8 +51,8 @@
                     complete: function () { $('#loading').hide(); }
                 })
                 .done(function (data) {
-                    var parsedJson = JSON.parse(data);
-                    self.revenues(parsedJson);
+                    //var parsedJson = JSON.parse(data);
+                    self.revenues(data.RevenueByWeek);
                 })
                 .error(function () {
                     $('#target').append('Failed');
@@ -61,20 +61,20 @@
                 $("#chartContainer").dxChart({
                     dataSource: self.revenues,
                     commonSeriesSettings: {
-                        argumentField: 'state',
+                        argumentField: 'Week',
                         type: 'stackedBar'
                     },
                     series: [
-                    { valueField: 'young', name: '0-14' },
-                    { valueField: 'middle', name: '15-64' },
-                    { valueField: 'older', name: '65 and older' }
+                    { valueField: 'Amazon', name: 'Amazon' },
+                    { valueField: 'Apple', name: 'Apple' },
+                    { valueField: 'Google', name: 'Google' }
                     ],
                     legend: {
                         verticalAlignment: 'bottom',
                         horizontalAlignment: 'center'
                     },
                     title: {
-                        text: 'Male Age Structure'
+                        text: 'Weekly Revenues'
                     }
                 });
 

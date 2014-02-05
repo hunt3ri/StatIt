@@ -7,7 +7,7 @@ namespace StatIt.Engine.Distimo.Services
     {
         string GetDownloads();
 
-        List<RevenueByWeek> GetRevenues(string queryString);
+        RevenueModel GetRevenues(string queryString);
 
         string GetEvents();
     }
