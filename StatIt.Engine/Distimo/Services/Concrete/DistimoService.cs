@@ -74,6 +74,7 @@ namespace StatIt.Engine.Distimo.Services
             return revenueData;
         }
 
+        // TODO refactor this into Factory Class
         public List<RevenueChartModel> GetWeeklyRevenues(List<dynamic> revenueList)
         {
             var revenueModel = new RevenueModel();
