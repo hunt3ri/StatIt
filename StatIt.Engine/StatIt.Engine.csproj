@@ -57,7 +57,7 @@
     <Compile Include="Distimo\Models\DistimoAuthToken.cs" />
     <Compile Include="Distimo\Services\Concrete\DistimoService.cs" />
     <Compile Include="Distimo\Services\Abstract\IDistimoService.cs" />
-    <Compile Include="Distimo\Services\Models\RevenueChartModel.cs" />
+    <Compile Include="Distimo\Services\Models\RevenueByWeek.cs" />
     <Compile Include="Distimo\Services\Models\RevenueModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Config\WebInstaller.cs" />
