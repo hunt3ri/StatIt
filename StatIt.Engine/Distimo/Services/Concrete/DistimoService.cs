@@ -79,7 +79,7 @@ namespace StatIt.Engine.Distimo.Services
         // TODO refactor this into Factory Class
         public List<RevenueByWeek> GetWeeklyRevenues(List<dynamic> revenueList)
         {
-            var revenueModel = new RevenueModel();
+            var revenueModel = new RevenueParser();
            
             // Get bounds for data, max number of points and oldest data point
             foreach (dynamic item in revenueList)

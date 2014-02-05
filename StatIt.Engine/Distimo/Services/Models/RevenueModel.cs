@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace StatIt.Engine.Distimo.Services.Models
 {
-    public class RevenueModel
+    /// <summary>
+    /// Helper class used to help parse raw revenue data from Distimo
+    /// </summary>
+    public class RevenueParser
     {
         public DateTime OldestDate { get; set; }
         public int MaxPointCount { get; set; }
@@ -15,7 +18,7 @@ namespace StatIt.Engine.Distimo.Services.Models
         public Dictionary<string, List<int>> CleanRevenueData { get; set; }
 
 
-        public RevenueModel()
+        public RevenueParser()
         {
             OldestDate = DateTime.Now;
             RawRevenueData = new Dictionary<string, List<int>>();
