@@ -74,7 +74,7 @@ namespace StatIt.Engine.Distimo.Services
             return revenueData;
         }
 
-        public void GetWeeklyRevenues(List<dynamic> revenueList)
+        public List<RevenueChartModel> GetWeeklyRevenues(List<dynamic> revenueList)
         {
             var revenueModel = new RevenueModel();
            
@@ -101,38 +101,46 @@ namespace StatIt.Engine.Distimo.Services
                 }    
             }
 
-            // Create ordered array
+
+
+                // Create ordered array
+            //    foreach (KeyValuePair<string, List<int>> unsortedList in revenueModel.UnsortedRevenues)
+            //    {
+            //        var orderedList = PopulateArray(revenueModel.MaxPointCount, unsortedList.Value);
+            //        revenueModel.StoreRevenues.Add(unsortedList.Key, orderedList);
+            //    }
+
             foreach (KeyValuePair<string, List<int>> unsortedList in revenueModel.UnsortedRevenues)
             {
-                var orderedList = PopulateArray(revenueModel.MaxPointCount, unsortedList.Value);
+                var orderedList = AddMissingPoints(revenueModel.MaxPointCount, unsortedList.Value);
                 revenueModel.StoreRevenues.Add(unsortedList.Key, orderedList);
             }
 
             // Populate model
             List<RevenueChartModel> chartModel = new List<RevenueChartModel>();
             var week = revenueModel.OldestDate;
-            
-            for (int i =0; i <= revenueModel.MaxPointCount - 1; i++)
+
+            for (int i = 0; i <= revenueModel.MaxPointCount - 1; i++)
             {
                 var model = new RevenueChartModel() { Week = week };
 
                 foreach (KeyValuePair<string, List<int>> sortedList in revenueModel.StoreRevenues)
                 {
-                        switch (sortedList.Key)
-                        {
-                            case "Amazon Appstore":
-                                model.Amazon = sortedList.Value[i];
-                                break;
-                            case "Apple App Store":
-                                model.Apple = sortedList.Value[i];
-                                break;
-                            case "Google Play Store":
-                                model.Google = sortedList.Value[i];
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException("Unexpected appstore value");
+                    switch (sortedList.Key)
+                    {
+                        case "Amazon Appstore":
+                            model.Amazon = sortedList.Value[i];
+                            break;
+                        case "Apple App Store":
+                            model.Apple = sortedList.Value[i];
+                            break;
+                        case "Google Play Store":
+                            model.Google = sortedList.Value[i];
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException("Unexpected appstore value");
 
-                        }
+                    }
 
                 }
 
@@ -140,33 +148,20 @@ namespace StatIt.Engine.Distimo.Services
                 week = week.AddDays(7);
             }
 
-
             var iain = chartModel;
+            return chartModel;
         }
 
-        public void TestRecurse()
+        public List<int> AddMissingPoints(int maxSize, List<int> dataPoints)
         {
-
-        }
-
-        public List<int> PopulateArray(int maxSize, List<int> dataPoints)
-        {
-
-            int[] test = new int[maxSize]; 
-            var dataPointCount = dataPoints.Count;
-
-            // Populate array in reverse meaning we leave a 0 for any data points that are empty.
-            for (int i = (maxSize - 1); i >= 0; --i)
+            // Insert 0's at start of all arrays to account for missing points
+            for (int i = dataPoints.Count; i < maxSize; i++)
             {
-                if (dataPointCount-- == 0)
-                    break;
-
-                test[i] = dataPoints[dataPointCount];
+                dataPoints.Insert(0, 0);
             }
 
-            return test.ToList();
+            return dataPoints;
         }
-
 
 
         public DateTime FromUnixTime(long unixTime)
