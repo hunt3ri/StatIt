@@ -91,7 +91,7 @@ namespace StatIt.Engine.Distimo.Services
                         dataPoints.Add(i.Value);
                 }
 
-                revenueModel.UnsortedRevenues.Add(AppStore, dataPoints);
+                revenueModel.RawRevenueData.Add(AppStore, dataPoints);
 
                 // Calculate oldest date
                 if (startDate < revenueModel.OldestDate)
@@ -101,19 +101,11 @@ namespace StatIt.Engine.Distimo.Services
                 }    
             }
 
-
-
-                // Create ordered array
-            //    foreach (KeyValuePair<string, List<int>> unsortedList in revenueModel.UnsortedRevenues)
-            //    {
-            //        var orderedList = PopulateArray(revenueModel.MaxPointCount, unsortedList.Value);
-            //        revenueModel.StoreRevenues.Add(unsortedList.Key, orderedList);
-            //    }
-
-            foreach (KeyValuePair<string, List<int>> unsortedList in revenueModel.UnsortedRevenues)
+            // Clean up data suitable for loading into Chart Model
+            foreach (KeyValuePair<string, List<int>> unsortedList in revenueModel.RawRevenueData)
             {
-                var orderedList = AddMissingPoints(revenueModel.MaxPointCount, unsortedList.Value);
-                revenueModel.StoreRevenues.Add(unsortedList.Key, orderedList);
+                var cleanData = AddMissingPoints(revenueModel.MaxPointCount, unsortedList.Value);
+                revenueModel.CleanRevenueData.Add(unsortedList.Key, cleanData);
             }
 
             // Populate model
@@ -124,7 +116,7 @@ namespace StatIt.Engine.Distimo.Services
             {
                 var model = new RevenueChartModel() { Week = week };
 
-                foreach (KeyValuePair<string, List<int>> sortedList in revenueModel.StoreRevenues)
+                foreach (KeyValuePair<string, List<int>> sortedList in revenueModel.CleanRevenueData)
                 {
                     switch (sortedList.Key)
                     {
