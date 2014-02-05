@@ -46,7 +46,7 @@ namespace StatIt.Engine.Distimo.Services
 
         }
 
-        public string GetRevenues(string queryString)
+        public List<RevenueByWeek> GetRevenues(string queryString)
         {
             // from=all&revenue=total&view=line&breakdown=application,appstore
             //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
@@ -69,13 +69,15 @@ namespace StatIt.Engine.Distimo.Services
                     filteredList.Add(line);
             }
 
-            GetWeeklyRevenues(filteredList);
+            return GetWeeklyRevenues(filteredList);
             
-            return revenueData;
+            //TODO create a more sophisticated model containing totals etc
+
+            //return revenueData;
         }
 
         // TODO refactor this into Factory Class
-        public List<RevenueChartModel> GetWeeklyRevenues(List<dynamic> revenueList)
+        public List<RevenueByWeek> GetWeeklyRevenues(List<dynamic> revenueList)
         {
             var revenueModel = new RevenueModel();
            
@@ -110,12 +112,12 @@ namespace StatIt.Engine.Distimo.Services
             }
 
             // Populate model
-            List<RevenueChartModel> chartModel = new List<RevenueChartModel>();
+            List<RevenueByWeek> chartModel = new List<RevenueByWeek>();
             var week = revenueModel.OldestDate;
 
             for (int i = 0; i <= revenueModel.MaxPointCount - 1; i++)
             {
-                var model = new RevenueChartModel() { Week = week };
+                var model = new RevenueByWeek() { Week = week.ToShortDateString() };
 
                 foreach (KeyValuePair<string, List<int>> sortedList in revenueModel.CleanRevenueData)
                 {

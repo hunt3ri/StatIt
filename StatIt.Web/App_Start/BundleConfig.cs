@@ -15,10 +15,11 @@ namespace StatIt.Web.App_Start
                      "~/Content/bootstrap.css",
                      "~/Content/StatIt.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+            bundles.Add(new ScriptBundle("~/bundles/presentation").Include(
                      "~/Scripts/bootstrap.js",
                      "~/Scripts/respond.js",
-                     "~/Scripts/knockout-3.0.0.js"));
+                     "~/Scripts/knockout-3.0.0.js",
+                     "~/Scripts/dx.chartjs.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                        "~/Scripts/jquery-{version}.js"));
