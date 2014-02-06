@@ -4,7 +4,25 @@
 
 <h1>Revenues</h1>
 
-<div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto"></div>
+<div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+     datasource: revenues,
+    commonSeriesSettings: {
+                    argumentField: 'Week',
+                    type: 'stackedBar'
+                },
+     series: [
+                    { valueField: 'Amazon', name: 'Amazon' },
+                    { valueField: 'Apple', name: 'Apple' },
+                    { valueField: 'Google', name: 'Google' }
+                ],
+                legend: {
+                    verticalAlignment: 'bottom',
+                    horizontalAlignment: 'center'
+                },
+                title: {
+                    text: 'Weekly Revenues'
+                }
+}"></div>
 
 <div id="target">
 
@@ -40,43 +58,68 @@
 
         $(document).ready(function () {
 
+
+            var chartData =  [{ "Week": "09/12/2013", "Amazon": 196, "Apple": 0, "Google": 0 }, { "Week": "16/12/2013", "Amazon": 443, "Apple": 9761, "Google": 0 }, { "Week": "23/12/2013", "Amazon": 1368, "Apple": 12000, "Google": 0 }, { "Week": "30/12/2013", "Amazon": 1653, "Apple": 9031, "Google": 0 }, { "Week": "06/01/2014", "Amazon": 1060, "Apple": 6179, "Google": 1361 }, { "Week": "13/01/2014", "Amazon": 1040, "Apple": 4620, "Google": 3316 }, { "Week": "20/01/2014", "Amazon": 1651, "Apple": 4510, "Google": 3846 }, { "Week": "27/01/2014", "Amazon": 1214, "Apple": 4208, "Google": 3288 }, { "Week": "03/02/2014", "Amazon": 314, "Apple": 805, "Google": 757 }];
+
+
+            //$("#chartContainer").dxChart({
+            //    dataSource: chartData,
+            //    commonSeriesSettings: {
+            //        argumentField: 'Week',
+            //        type: 'stackedBar'
+            //    },
+            //    series: [
+            //        { valueField: 'Amazon', name: 'Amazon' },
+            //        { valueField: 'Apple', name: 'Apple' },
+            //        { valueField: 'Google', name: 'Google' }
+            //    ],
+            //    legend: {
+            //        verticalAlignment: 'bottom',
+            //        horizontalAlignment: 'center'
+            //    },
+            //    title: {
+            //        text: 'Weekly Revenues'
+            //    }
+            //});
+
+
             function RevenuesViewModel() {
                 var self = this;
 
-                self.revenues = ko.observableArray();
+                self.revenues = ko.observableArray(chartData);
 
-                $.ajax({
-                    url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
-                    beforeSend: function () { $('#loading').show(); },
-                    complete: function () { $('#loading').hide(); }
-                })
-                .done(function (data) {
-                    //var parsedJson = JSON.parse(data);
-                    self.revenues(data.RevenueByWeek);
-                })
-                .error(function () {
-                    $('#target').append('Failed');
-                })
+                //$.ajax({
+                //    url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
+                //    beforeSend: function () { $('#loading').show(); },
+                //    complete: function () { $('#loading').hide(); }
+                //})
+                //.done(function (data) {
+                //    //var parsedJson = JSON.parse(data);
+                //    self.revenues(data.RevenueByWeek);
+                //})
+                //.error(function () {
+                //    $('#target').append('Failed');
+                //});
 
-                $("#chartContainer").dxChart({
-                    dataSource: self.revenues,
-                    commonSeriesSettings: {
-                        argumentField: 'Week',
-                        type: 'stackedBar'
-                    },
-                    series: [
-                    { valueField: 'Amazon', name: 'Amazon' },
-                    { valueField: 'Apple', name: 'Apple' },
-                    { valueField: 'Google', name: 'Google' }
-                    ],
-                    legend: {
-                        verticalAlignment: 'bottom',
-                        horizontalAlignment: 'center'
-                    },
-                    title: {
-                        text: 'Weekly Revenues'
-                    }
-                });
+                //$("#chartContainer").dxChart({
+                //    dataSource: self.revenues,
+                //    commonSeriesSettings: {
+                //        argumentField: 'Week',
+                //        type: 'stackedBar'
+                //    },
+                //    series: [
+                //    { valueField: 'Amazon', name: 'Amazon' },
+                //    { valueField: 'Apple', name: 'Apple' },
+                //    { valueField: 'Google', name: 'Google' }
+                //    ],
+                //    legend: {
+                //        verticalAlignment: 'bottom',
+                //        horizontalAlignment: 'center'
+                //    },
+                //    title: {
+                //        text: 'Weekly Revenues'
+                //    }
+                //});
 
             }
 
