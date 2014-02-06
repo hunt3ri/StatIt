@@ -8,7 +8,12 @@
     dataSource: revenues,
     commonSeriesSettings: {
         argumentField: 'Week',
-        type: 'stackedBar'
+        type: 'stackedBar',
+        label: {
+            visible: true,
+            format: 'currency',
+            showForZeroValues: false
+        }
     },
     series: [
         { valueField: 'Amazon', name: 'Amazon' },
