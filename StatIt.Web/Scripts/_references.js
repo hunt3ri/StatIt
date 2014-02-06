@@ -365,3 +365,4 @@
 /// <reference path="chartjs-modules/dx.module-viz-charts.js" />
 /// <reference path="chartjs-modules/dx.module-core.js" />
 /// <reference path="jquery-2.1.0.js" />
+/// <reference path="statit/revenueviewmodel.js" />
