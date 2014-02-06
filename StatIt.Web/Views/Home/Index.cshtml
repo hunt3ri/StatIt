@@ -25,7 +25,7 @@
         horizontalAlignment: 'center'
     },
     title: {
-        text: 'Weekly Revenues'
+        text: 'Weekly Download Revenues'
     }}"></div>
 
 <div id="target">
@@ -67,6 +67,8 @@
                 var self = this;
 
                 self.revenues = ko.observableArray();
+
+                self.iain = ko.observable('Iain Test');
 
                 $.ajax({
                     url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
