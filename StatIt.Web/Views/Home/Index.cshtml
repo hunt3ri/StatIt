@@ -3,20 +3,28 @@
 }
 
 <h1>Revenues</h1>
-<div id="sandbox-container">
-    <div class="input-daterange input-group" id="datepicker">
-        <input type="text" class="input-sm form-control" name="start" />
-        <span class="input-group-addon">to</span>
-        <input type="text" class="input-sm form-control" name="end" />
+<div class="row">
+    <div class="col-md-3">
+        <div id="sandbox-container">
+            <div class="input-daterange input-group" id="datepicker">
+                <input type="text" class="input-sm form-control" name="start" data-bind="value: dateStart" />
+                <span class="input-group-addon">to</span>
+                <input type="text" class="input-sm form-control" name="end" data-bind="value: dateEnd" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-success btn-sm" data-bind="click: refreshData">Refresh</button>
     </div>
 </div>
 
 
-<div class="row">
-    <div class="col-md-8">
+
+    <div class="row">
+        <div class="col-md-8">
 
 
-        <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+            <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: revenues,
     commonSeriesSettings: {
         argumentField: 'Week',
@@ -41,68 +49,68 @@
     }}"></div>
 
 
-        <div id="loading">
-            <img src="/Content/images/ajax-loader.gif" />
+            <div id="loading">
+                <img src="/Content/images/ajax-loader.gif" />
+            </div>
+
+        </div>
+        `   <div class="col-md-4">
+            <p>Today's message is: <span data-bind="text: myMessage"></span></p>
         </div>
 
     </div>
-    `   <div class="col-md-4">
-        <p>Today's message is: <span data-bind="text: myMessage"></span></p>
-    </div>
 
-</div>
+    @*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
 
-@*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
+        </div>*@
 
-    </div>*@
+    @section Scripts {
 
-@section Scripts {
+        @*<script type="text/html" id="download-template">
 
-    @*<script type="text/html" id="download-template">
+                <li>
+                    Application <span data-bind="text: data.application"> </span>
+                </li>
 
-            <li>
-                Application <span data-bind="text: data.application"> </span>
-            </li>
+            </script>
 
-        </script>
+            <script type="text/html" id="revenue-template">
+                <div class="col-md-3">
+                    <h2 data-bind="text: data.application"></h2>
+                    <h3 data-bind="text: data.appstore"></h3>
+                    <h3 data-bind="text: points"></h3>
+                </div>
+            </script>*@
 
-        <script type="text/html" id="revenue-template">
-            <div class="col-md-3">
-                <h2 data-bind="text: data.application"></h2>
-                <h3 data-bind="text: data.appstore"></h3>
-                <h3 data-bind="text: points"></h3>
-            </div>
-        </script>*@
+        <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
 
-    <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+        @*<script>
 
-    @*<script>
+                $(document).ready(function () {
 
-            $(document).ready(function () {
+                    function DownloadsViewModel() {
+                        var self = this;
+                        self.downloads = ko.observableArray();
 
-                function DownloadsViewModel() {
-                    var self = this;
-                    self.downloads = ko.observableArray();
+                        $.ajax({
+                            url: '/Home/GetDownloads',
+                            beforeSend: function () { $('#loading').show(); },
+                            complete: function () { $('#loading').hide(); }
+                        })
+                        .done(function (data) {
+                            var parsedJson = JSON.parse(data);
+                            self.downloads(parsedJson.lines);
+                        })
+                        .error(function () {
+                            $('#target').append('Failed');
+                        })
+                    }
 
-                    $.ajax({
-                        url: '/Home/GetDownloads',
-                        beforeSend: function () { $('#loading').show(); },
-                        complete: function () { $('#loading').hide(); }
-                    })
-                    .done(function (data) {
-                        var parsedJson = JSON.parse(data);
-                        self.downloads(parsedJson.lines);
-                    })
-                    .error(function () {
-                        $('#target').append('Failed');
-                    })
-                }
-
-               // ko.applyBindings(new DownloadsViewModel());
+                   // ko.applyBindings(new DownloadsViewModel());
 
 
-            });
-        </script>*@
-}
+                });
+            </script>*@
+    }
 
 
