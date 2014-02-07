@@ -1,5 +1,11 @@
 ﻿$(document).ready(function () {
 
+    $('#sandbox-container .input-daterange').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    });
+
     function RevenuesViewModel() {
 
         var self = this;

@@ -13,10 +13,12 @@ namespace StatIt.Web.App_Start
         {
             bundles.Add(new StyleBundle("~/Content/css").Include(
                      "~/Content/bootstrap.css",
+                     "~/Content/bootstrap-datepicker3.css",
                      "~/Content/StatIt.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/presentation").Include(
                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootstrap-datepicker.js",
                      "~/Scripts/respond.js",
                      "~/Scripts/knockout-3.0.0.js",
                      "~/Scripts/globalize/globalize.js",

@@ -3,12 +3,18 @@
 }
 
 <h1>Revenues</h1>
-<p>Date From: <input /> Date To: <input /></p>
+<div id="sandbox-container">
+    <div class="input-daterange input-group" id="datepicker">
+        <input type="text" class="input-sm form-control" name="start" />
+        <span class="input-group-addon">to</span>
+        <input type="text" class="input-sm form-control" name="end" />
+    </div>
+</div>
 
 
 <div class="row">
     <div class="col-md-8">
-        
+
 
         <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: revenues,
@@ -35,68 +41,68 @@
     }}"></div>
 
 
-            <div id="loading">
-                <img src="/Content/images/ajax-loader.gif" />
-            </div>
+        <div id="loading">
+            <img src="/Content/images/ajax-loader.gif" />
+        </div>
 
-        </div>
+    </div>
     `   <div class="col-md-4">
-            <p>Today's message is: <span data-bind="text: myMessage"></span></p>
-        </div>
-    
+        <p>Today's message is: <span data-bind="text: myMessage"></span></p>
     </div>
 
-    @*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
+</div>
 
-        </div>*@
+@*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
 
-    @section Scripts {
+    </div>*@
 
-        @*<script type="text/html" id="download-template">
+@section Scripts {
 
-                <li>
-                    Application <span data-bind="text: data.application"> </span>
-                </li>
+    @*<script type="text/html" id="download-template">
 
-            </script>
+            <li>
+                Application <span data-bind="text: data.application"> </span>
+            </li>
 
-            <script type="text/html" id="revenue-template">
-                <div class="col-md-3">
-                    <h2 data-bind="text: data.application"></h2>
-                    <h3 data-bind="text: data.appstore"></h3>
-                    <h3 data-bind="text: points"></h3>
-                </div>
-            </script>*@
+        </script>
 
-        <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+        <script type="text/html" id="revenue-template">
+            <div class="col-md-3">
+                <h2 data-bind="text: data.application"></h2>
+                <h3 data-bind="text: data.appstore"></h3>
+                <h3 data-bind="text: points"></h3>
+            </div>
+        </script>*@
 
-        @*<script>
+    <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
 
-                $(document).ready(function () {
+    @*<script>
 
-                    function DownloadsViewModel() {
-                        var self = this;
-                        self.downloads = ko.observableArray();
+            $(document).ready(function () {
 
-                        $.ajax({
-                            url: '/Home/GetDownloads',
-                            beforeSend: function () { $('#loading').show(); },
-                            complete: function () { $('#loading').hide(); }
-                        })
-                        .done(function (data) {
-                            var parsedJson = JSON.parse(data);
-                            self.downloads(parsedJson.lines);
-                        })
-                        .error(function () {
-                            $('#target').append('Failed');
-                        })
-                    }
+                function DownloadsViewModel() {
+                    var self = this;
+                    self.downloads = ko.observableArray();
 
-                   // ko.applyBindings(new DownloadsViewModel());
+                    $.ajax({
+                        url: '/Home/GetDownloads',
+                        beforeSend: function () { $('#loading').show(); },
+                        complete: function () { $('#loading').hide(); }
+                    })
+                    .done(function (data) {
+                        var parsedJson = JSON.parse(data);
+                        self.downloads(parsedJson.lines);
+                    })
+                    .error(function () {
+                        $('#target').append('Failed');
+                    })
+                }
+
+               // ko.applyBindings(new DownloadsViewModel());
 
 
-                });
-            </script>*@
-    }
+            });
+        </script>*@
+}
 
 
