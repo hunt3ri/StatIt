@@ -3,8 +3,14 @@
 }
 
 <h1>Revenues</h1>
+<p>Date From: <input /> Date To: <input /></p>
 
-<div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+
+<div class="row">
+    <div class="col-md-8">
+        
+
+        <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: revenues,
     commonSeriesSettings: {
         argumentField: 'Week',
@@ -28,65 +34,69 @@
         text: 'Weekly Download Revenues'
     }}"></div>
 
-<div id="target">
 
-</div>
+            <div id="loading">
+                <img src="/Content/images/ajax-loader.gif" />
+            </div>
 
-<div id="loading">
-    <img src="/Content/images/ajax-loader.gif" />
-</div>
-
-@*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
-    
-</div>*@
-
-@section Scripts {
-
-    @*<script type="text/html" id="download-template">
-
-        <li>
-            Application <span data-bind="text: data.application"> </span>
-        </li>
-
-    </script>
-
-    <script type="text/html" id="revenue-template">
-        <div class="col-md-3">
-            <h2 data-bind="text: data.application"></h2>
-            <h3 data-bind="text: data.appstore"></h3>
-            <h3 data-bind="text: points"></h3>
         </div>
-    </script>*@
+    `   <div class="col-md-4">
+            <p>Today's message is: <span data-bind="text: myMessage"></span></p>
+        </div>
+    
+    </div>
 
-<script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+    @*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
 
-    @*<script>
+        </div>*@
 
-        $(document).ready(function () {
+    @section Scripts {
 
-            function DownloadsViewModel() {
-                var self = this;
-                self.downloads = ko.observableArray();
+        @*<script type="text/html" id="download-template">
 
-                $.ajax({
-                    url: '/Home/GetDownloads',
-                    beforeSend: function () { $('#loading').show(); },
-                    complete: function () { $('#loading').hide(); }
-                })
-                .done(function (data) {
-                    var parsedJson = JSON.parse(data);
-                    self.downloads(parsedJson.lines);
-                })
-                .error(function () {
-                    $('#target').append('Failed');
-                })
-            }
+                <li>
+                    Application <span data-bind="text: data.application"> </span>
+                </li>
 
-           // ko.applyBindings(new DownloadsViewModel());
+            </script>
+
+            <script type="text/html" id="revenue-template">
+                <div class="col-md-3">
+                    <h2 data-bind="text: data.application"></h2>
+                    <h3 data-bind="text: data.appstore"></h3>
+                    <h3 data-bind="text: points"></h3>
+                </div>
+            </script>*@
+
+        <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+
+        @*<script>
+
+                $(document).ready(function () {
+
+                    function DownloadsViewModel() {
+                        var self = this;
+                        self.downloads = ko.observableArray();
+
+                        $.ajax({
+                            url: '/Home/GetDownloads',
+                            beforeSend: function () { $('#loading').show(); },
+                            complete: function () { $('#loading').hide(); }
+                        })
+                        .done(function (data) {
+                            var parsedJson = JSON.parse(data);
+                            self.downloads(parsedJson.lines);
+                        })
+                        .error(function () {
+                            $('#target').append('Failed');
+                        })
+                    }
+
+                   // ko.applyBindings(new DownloadsViewModel());
 
 
-        });
-    </script>*@
-}
+                });
+            </script>*@
+    }
 
 

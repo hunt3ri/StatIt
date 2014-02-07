@@ -4,9 +4,11 @@
 
         var self = this;
 
-        self.revenues = ko.observableArray();
+        self.myMessage = ko.observable();
 
-        self.iain = ko.observable('Iain Test');
+        self.myMessage('Test');
+
+        self.revenues = ko.observableArray();
 
         $.ajax({
             url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
