@@ -46,10 +46,27 @@ namespace StatIt.Engine.Distimo.Services
 
         }
 
+        /// <summary>
+        /// Helper function returns nearest Monday which is the Day Distimo uses as the start
+        /// of the week.
+        /// </summary>
+        /// <param name="StartDate"></param>
+        /// <returns></returns>
+        private DateTime GetNearestMonday(DateTime StartDate)
+        {
+            DayOfWeek monday = DayOfWeek.Monday;
+            return StartDate.AddDays(-(StartDate.DayOfWeek - monday));
+
+        }
+
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
             // from=all&revenue=total&view=line&breakdown=application,appstore
             //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
+            
+            // Round to nearest Monday so graph looks sane
+            StartDate = GetNearestMonday(StartDate);
+
             var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" +  EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
 
             var revenueData = WebRequestService.GetWebRequest(revenueRequest);
