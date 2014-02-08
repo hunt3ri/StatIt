@@ -28,11 +28,15 @@ namespace StatIt.Web.Controllers
             return View();
         }
 
-        public JsonResult GetRevenues()
+        public JsonResult GetRevenues(string AppId, string DateStart, string DateEnd)
         {
-            var queryString = Uri.UnescapeDataString(Request.QueryString.ToString());
 
-            var revenueData = DistimoService.GetRevenues(queryString);
+            var dateStart = DateTime.ParseExact(DateStart, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+            var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+            var revenueData = DistimoService.GetRevenues(AppId, dateStart, dateEnd);
 
             var jsonData = Json(revenueData, JsonRequestBehavior.AllowGet);
 

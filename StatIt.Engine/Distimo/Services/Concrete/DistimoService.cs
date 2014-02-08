@@ -46,11 +46,13 @@ namespace StatIt.Engine.Distimo.Services
 
         }
 
-        public RevenueModel GetRevenues(string queryString)
+        public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
+
+            //var iain = StartDate.DayOfWeek
             // from=all&revenue=total&view=line&breakdown=application,appstore
             //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
-            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
+            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" +  EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
 
             var revenueData = WebRequestService.GetWebRequest(revenueRequest);
 

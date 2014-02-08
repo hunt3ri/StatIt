@@ -26,7 +26,7 @@
 
 
         $.ajax({
-            url: '/Home/GetRevenues?addId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
+            url: '/Home/GetRevenues?appId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
              //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
             beforeSend: function () {
                 $('#loading').show();
