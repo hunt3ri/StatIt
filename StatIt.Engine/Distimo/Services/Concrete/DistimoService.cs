@@ -86,8 +86,8 @@ namespace StatIt.Engine.Distimo.Services
                     filteredList.Add(line);
             }
 
-            var revenueModel = new RevenueModel();
-            revenueModel.RevenueByWeek = GetWeeklyRevenues(filteredList);
+            var revenueModel = new RevenueModel(GetWeeklyRevenues(filteredList), StartDate);
+            //revenueModel.RevenueByWeek = GetWeeklyRevenues(filteredList);
             return revenueModel;
             
             //TODO create a more sophisticated model containing totals etc

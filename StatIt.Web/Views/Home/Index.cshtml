@@ -24,6 +24,7 @@
         <div class="col-md-6">
 
 
+
             <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: revenues,
     commonSeriesSettings: {
@@ -52,65 +53,76 @@
             <div id="loading">
                 <img src="/Content/images/ajax-loader.gif" />
             </div>
-
-        </div>
-        `   <div class="col-md-4">
-            <p>Today's message is: <span data-bind="text: myMessage"></span></p>
-        </div>
-
-    </div>
-
-    @*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
-
-        </div>*@
-
-    @section Scripts {
-
-        @*<script type="text/html" id="download-template">
-
-                <li>
-                    Application <span data-bind="text: data.application"> </span>
-                </li>
-
-            </script>
-
-            <script type="text/html" id="revenue-template">
-                <div class="col-md-3">
-                    <h2 data-bind="text: data.application"></h2>
-                    <h3 data-bind="text: data.appstore"></h3>
-                    <h3 data-bind="text: points"></h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>
+                        Total Revenue: <strong>$<span data-bind="text: grossRevenue"></span></strong> </h4>
                 </div>
-            </script>*@
+                <div class="col-md-6">
+                        <h4>
+                        Share Revenue: <strong style="color: #33CC33; ">$<span data-bind="text: shareRevenue"></span></strong>
+                        </h4>
+                </div>
+            </div>
 
-        <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+                </div>
+                `   <div class="col-md-4">
+                    <p>Today's message is: <span data-bind="text: myMessage"></span></p>
+                </div>
 
-        @*<script>
+            </div>
 
-                $(document).ready(function () {
+            @*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
 
-                    function DownloadsViewModel() {
-                        var self = this;
-                        self.downloads = ko.observableArray();
+            </div>*@
 
-                        $.ajax({
-                            url: '/Home/GetDownloads',
-                            beforeSend: function () { $('#loading').show(); },
-                            complete: function () { $('#loading').hide(); }
-                        })
-                        .done(function (data) {
-                            var parsedJson = JSON.parse(data);
-                            self.downloads(parsedJson.lines);
-                        })
-                        .error(function () {
-                            $('#target').append('Failed');
-                        })
-                    }
+            @section Scripts {
 
-                   // ko.applyBindings(new DownloadsViewModel());
+                @*<script type="text/html" id="download-template">
+
+                    <li>
+                        Application <span data-bind="text: data.application"> </span>
+                    </li>
+
+                </script>
+
+                <script type="text/html" id="revenue-template">
+                    <div class="col-md-3">
+                        <h2 data-bind="text: data.application"></h2>
+                        <h3 data-bind="text: data.appstore"></h3>
+                        <h3 data-bind="text: points"></h3>
+                    </div>
+                </script>*@
+
+                <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+
+                @*<script>
+
+                    $(document).ready(function () {
+
+                        function DownloadsViewModel() {
+                            var self = this;
+                            self.downloads = ko.observableArray();
+
+                            $.ajax({
+                                url: '/Home/GetDownloads',
+                                beforeSend: function () { $('#loading').show(); },
+                                complete: function () { $('#loading').hide(); }
+                            })
+                            .done(function (data) {
+                                var parsedJson = JSON.parse(data);
+                                self.downloads(parsedJson.lines);
+                            })
+                            .error(function () {
+                                $('#target').append('Failed');
+                            })
+                        }
+
+                       // ko.applyBindings(new DownloadsViewModel());
 
 
-                });
-            </script>*@
-    }
+                    });
+                </script>*@
+            }
 
 

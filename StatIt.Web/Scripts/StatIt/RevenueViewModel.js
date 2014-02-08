@@ -23,8 +23,6 @@
 
     function RefreshData(dateStart, dateEnd, callback)
     {
-
-
         $.ajax({
             url: '/Home/GetRevenues?appId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
              //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
@@ -38,7 +36,7 @@
         })
         .done(function (data) {
             $('#chartContainer').show();
-            callback(data.RevenueByWeek);
+            callback(data);
         })
         .error(function () {
             $('#target').append('Failed');
@@ -59,17 +57,25 @@
         self.dateStart = ko.observable(fromDate);
         self.dateEnd = ko.observable(toDate);
         self.revenues = ko.observableArray();
+        self.grossRevenue = ko.observable();
+        self.shareRevenue = ko.observable();
 
         // Refresh Click handler
         self.refreshData = function () {
             RefreshData(self.dateStart(), self.dateEnd(), function (data) {
-                self.revenues(data);
+                self.revenues(data.RevenueByWeek);
+                self.dateStart(data.StartDate);
+                self.grossRevenue(data.GrossRevenue);
+                self.shareRevenue(data.GrossRevenue * 0.7);
             });
         };
 
         // Display Graph for default vaules
         RefreshData(self.dateStart(), self.dateEnd(), function (data) {
-            self.revenues(data);
+            self.revenues(data.RevenueByWeek);
+            self.dateStart(data.StartDate);
+            self.grossRevenue(data.GrossRevenue);
+            self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
         });
 
     }
