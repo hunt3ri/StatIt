@@ -68,6 +68,8 @@ namespace StatIt.Engine.Distimo.Services
             StartDate = GetNearestMonday(StartDate);
 
             var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" +  EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
+           // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
+
 
             var revenueData = WebRequestService.GetWebRequest(revenueRequest);
 
@@ -218,7 +220,11 @@ namespace StatIt.Engine.Distimo.Services
         private HttpWebRequest CreateDistimoRequest(string apiAddress, string queryString)
         {
             // Format QueryString
-            queryString = queryString + "&" + QueryFormat;
+            if (queryString != String.Empty)
+                queryString = queryString + "&" + QueryFormat;
+            else
+                queryString = queryString + QueryFormat;
+
             var authToken = CreateAuthToken(queryString);
 
             string url = apiAddress + "?" + queryString + "&apikey=" + DistimoPublicKey + "&hash=" + authToken.AuthHash + "&t=" + authToken.Time + queryString;
