@@ -60,23 +60,20 @@
         self.grossRevenue = ko.observable();
         self.shareRevenue = ko.observable();
 
-        // Refresh Click handler
-        self.refreshData = function () {
+        var revFunction = function () {
             RefreshData(self.dateStart(), self.dateEnd(), function (data) {
                 self.revenues(data.RevenueByWeek);
                 self.dateStart(data.StartDate);
                 self.grossRevenue(data.GrossRevenue);
-                self.shareRevenue(data.GrossRevenue * 0.7);
+                self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
             });
         };
 
-        // Display Graph for default vaules
-        RefreshData(self.dateStart(), self.dateEnd(), function (data) {
-            self.revenues(data.RevenueByWeek);
-            self.dateStart(data.StartDate);
-            self.grossRevenue(data.GrossRevenue);
-            self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
-        });
+        // Click handler for refresh button
+        self.refreshData = revFunction;
+
+        // Init graphs with default values
+        revFunction.call();
 
     }
     ko.applyBindings(new RevenuesViewModel());
