@@ -10,11 +10,12 @@ namespace StatIt.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDistimoService DistimoService;
+        //private readonly IDistimoService DistimoService;
+        private readonly IRevenuesFactory RevenuesFactory;
 
-        public HomeController(IDistimoService distimoService)
+        public HomeController(IRevenuesFactory revenuesFactory)
         {
-            DistimoService = distimoService;
+            RevenuesFactory = revenuesFactory;
         }
         //
         // GET: /Home/
@@ -36,21 +37,22 @@ namespace StatIt.Web.Controllers
             var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture);
 
-            var revenueData = DistimoService.GetRevenues(AppId, dateStart, dateEnd);
+            //var revenueData = DistimoService.GetRevenues(AppId, dateStart, dateEnd);
+            var revenueData = RevenuesFactory.GetRevenues(AppId, dateStart, dateEnd);
 
             var jsonData = Json(revenueData, JsonRequestBehavior.AllowGet);
 
             return jsonData;
         }
 
-        public JsonResult GetDownloads()
-        {
-            var downloadData = DistimoService.GetDownloads();
+        //public JsonResult GetDownloads()
+        //{
+        //    var downloadData = DistimoService.GetDownloads();
 
-            var jsonData = Json(downloadData, JsonRequestBehavior.AllowGet);
+        //    var jsonData = Json(downloadData, JsonRequestBehavior.AllowGet);
 
-            return jsonData;
+        //    return jsonData;
             
-        }
+        //}
     }
 }

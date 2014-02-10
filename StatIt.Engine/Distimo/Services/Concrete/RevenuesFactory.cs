@@ -1,81 +1,36 @@
 ﻿using JsonFx.Json;
-using StatIt.Engine.Distimo.Models;
 using StatIt.Engine.Distimo.Services;
 using StatIt.Engine.Distimo.Services.Models;
 using StatIt.Engine.Web.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace StatIt.Engine.Distimo.Services
 {
-    public class DistimoService : IDistimoService
+    public class RevenuesFactory : IRevenuesFactory
     {
-        //private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v4/";
-        private static string QueryFormat = "format=json";
-        private  string DownloadAPI;
-
-        private static string DistimoPrivateKey;
-        private static string DistimoPublicKey;
-        private static string DistimoUserName; 
-        private static string DistimoPassword;
-
+        private readonly IDistimoService DistimoService;
         private readonly IWebRequestService WebRequestService;
 
-        public string DistimoAPIAddress
+        public RevenuesFactory(IDistimoService distimoService,  IWebRequestService webRequestService)
         {
-            get { return "https://analytics.distimo.com/api/v4/"; }
-        }
-
-        public DistimoService(IWebRequestService webRequestService)
-        {
-            DownloadAPI = DistimoAPIAddress;
-
+            DistimoService = distimoService;
             WebRequestService = webRequestService;
-
-            DistimoPrivateKey = APIKeys.DistimoPrivateKey;
-            DistimoPublicKey = APIKeys.DistimoPublicKey;
-            DistimoUserName = APIKeys.DistimoUserName;
-            DistimoPassword = APIKeys.DistimoPassword;
-        }
-
-        public string GetDownloads()
-        {
-            var downloadRequest = CreateDistimoRequest(DownloadAPI + "downloads", "breakdown=application,appstore&from=all&view=line");
-
-            var downloadData = WebRequestService.GetWebRequest(downloadRequest);
-
-            return downloadData;
-
-        }
-
-        /// <summary>
-        /// Helper function returns nearest Monday which is the Day Distimo uses as the start
-        /// of the week.
-        /// </summary>
-        /// <param name="StartDate"></param>
-        /// <returns></returns>
-        private DateTime GetNearestMonday(DateTime StartDate)
-        {
-            DayOfWeek monday = DayOfWeek.Monday;
-            return StartDate.AddDays(-(StartDate.DayOfWeek - monday));
-
         }
 
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
             // from=all&revenue=total&view=line&breakdown=application,appstore
             //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
-            
+
             // Round to nearest Monday so graph looks sane
             StartDate = GetNearestMonday(StartDate);
 
-            var revenueRequest = CreateDistimoRequest(DownloadAPI + "revenues", "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" +  EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
-           // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
+            var revenueRequest = DistimoService.CreateDistimoRequest(DistimoService.DistimoAPIAddress + "revenues", "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
+            // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
 
 
             var revenueData = WebRequestService.GetWebRequest(revenueRequest);
@@ -98,17 +53,16 @@ namespace StatIt.Engine.Distimo.Services
             var revenueModel = new RevenueModel(GetWeeklyRevenues(filteredList), StartDate);
             //revenueModel.RevenueByWeek = GetWeeklyRevenues(filteredList);
             return revenueModel;
-            
+
             //TODO create a more sophisticated model containing totals etc
 
             //return revenueData;
         }
 
-        // TODO refactor this into Factory Class
         public List<RevenueByWeek> GetWeeklyRevenues(List<dynamic> revenueList)
         {
             var revenueModel = new RevenueParser();
-           
+
             // Get bounds for data, max number of points and oldest data point
             foreach (dynamic item in revenueList)
             {
@@ -127,9 +81,9 @@ namespace StatIt.Engine.Distimo.Services
                 // Calculate oldest date
                 if (startDate < revenueModel.OldestDate)
                 {
-                    revenueModel.OldestDate = startDate; 
+                    revenueModel.OldestDate = startDate;
                     revenueModel.MaxPointCount = dataPoints.Count; // Must be highest if date is oldest
-                }    
+                }
             }
 
             // Clean up data suitable for loading into Chart Model
@@ -175,7 +129,19 @@ namespace StatIt.Engine.Distimo.Services
             return chartModel;
         }
 
-        public List<int> AddMissingPoints(int maxSize, List<int> dataPoints)
+
+        public void IAPRevenues(string AppId, DateTime StartDate, DateTime EndDate)
+        {
+            // Get Total Revenues for Fairy School
+
+            // Get IAPs by Revenue
+
+            // Foreach parentid get appstore id
+
+            // foreach appstore id, add to the relevant total
+        }
+
+        private List<int> AddMissingPoints(int maxSize, List<int> dataPoints)
         {
             // Insert 0's at start of all arrays to account for missing points
             for (int i = dataPoints.Count; i < maxSize; i++)
@@ -187,60 +153,25 @@ namespace StatIt.Engine.Distimo.Services
         }
 
 
-        public DateTime FromUnixTime(long unixTime)
+        private DateTime FromUnixTime(long unixTime)
         {
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             return epoch.AddMilliseconds(unixTime);
         }
 
-        public string GetEvents()
-        {
-            var eventRequest = CreateDistimoRequest(DownloadAPI + "events", "from=all&types=price");
 
-            var eventData = WebRequestService.GetWebRequest(eventRequest);
-
-            return eventData;
-
-        }
 
         /// <summary>
-        /// Helper method to create the appropriate Authentication Hash that Distimo expects
+        /// Helper function returns nearest Monday which is the Day Distimo uses as the start
+        /// of the week.
         /// </summary>
-        /// <returns>Distimo Authentication Hash</returns>
-        private DistimoAuthToken CreateAuthToken(string queryString)
+        /// <param name="StartDate"></param>
+        /// <returns></returns>
+        private DateTime GetNearestMonday(DateTime StartDate)
         {
-           
-            var time = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-            string data = String.Concat(queryString, time);
+            DayOfWeek monday = DayOfWeek.Monday;
+            return StartDate.AddDays(-(StartDate.DayOfWeek - monday));
 
-            HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(DistimoPrivateKey));
-            hmac.Initialize();
-            byte[] buffer = Encoding.ASCII.GetBytes(data);
-            string hash = BitConverter.ToString(hmac.ComputeHash(buffer)).Replace("-", "").ToLower();
-
-            string user = String.Concat(DistimoUserName, ":", DistimoPassword);
-            string base64Login = Convert.ToBase64String(Encoding.Default.GetBytes(user));
-
-            return new DistimoAuthToken(hash, base64Login, time);
         }
-
-        public HttpWebRequest CreateDistimoRequest(string apiAddress, string queryString)
-        {
-            // Format QueryString
-            if (queryString != String.Empty)
-                queryString = queryString + "&" + QueryFormat;
-            else
-                queryString = queryString + QueryFormat;
-
-            var authToken = CreateAuthToken(queryString);
-
-            string url = apiAddress + "?" + queryString + "&apikey=" + DistimoPublicKey + "&hash=" + authToken.AuthHash + "&t=" + authToken.Time + queryString;
-            var request = HttpWebRequest.Create(url) as HttpWebRequest;
-            request.Headers["Authorization"] = String.Concat("Basic ", authToken.Base64Login);
-
-            return request;
-        }
-
-
     }
 }
