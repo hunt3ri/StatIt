@@ -59,6 +59,7 @@
     <Compile Include="Distimo\Services\Abstract\IDistimoService.cs" />
     <Compile Include="Distimo\Services\Abstract\IRevenuesFactory.cs" />
     <Compile Include="Distimo\Services\Concrete\RevenuesFactory.cs" />
+    <Compile Include="Distimo\Services\Models\DistimoApi.cs" />
     <Compile Include="Distimo\Services\Models\RevenueByWeek.cs" />
     <Compile Include="Distimo\Services\Models\RevenueModel.cs" />
     <Compile Include="Distimo\Services\Models\RevenueParser.cs" />

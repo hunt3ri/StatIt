@@ -23,6 +23,8 @@ namespace StatIt.Engine.Distimo.Services
         private static string DistimoUserName; 
         private static string DistimoPassword;
 
+        enum Days { Sat, Sun, Mon, Tue, Wed, Thu, Fri };
+
         private readonly IWebRequestService WebRequestService;
 
         public string DistimoAPIAddress
