@@ -6,13 +6,6 @@ namespace StatIt.Engine.Distimo.Services
 {
     public interface IDistimoService
     {
-        string GetDownloads();
-
-        RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate);
-
-        string GetEvents();
-
-        // Refactored interface
 
         string DistimoAPIAddress { get; }
 
