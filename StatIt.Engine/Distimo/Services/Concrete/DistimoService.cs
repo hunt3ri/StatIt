@@ -17,25 +17,17 @@ namespace StatIt.Engine.Distimo.Services
     {
         private static string QueryFormat = "format=json";
         private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v4/";
-        //private  string DownloadAPI;
 
         private static string DistimoPrivateKey;
         private static string DistimoPublicKey;
         private static string DistimoUserName; 
         private static string DistimoPassword;
 
-        enum Days { Sat, Sun, Mon, Tue, Wed, Thu, Fri };
-
         private readonly IWebRequestService WebRequestService;
 
-        //public string DistimoAPIAddress
-        //{
-        //    get { return "https://analytics.distimo.com/api/v4/"; }
-        //}
 
         public DistimoService(IWebRequestService webRequestService)
         {
-            //DownloadAPI = DistimoAPIAddress;
 
             WebRequestService = webRequestService;
 
@@ -46,7 +38,7 @@ namespace StatIt.Engine.Distimo.Services
         }
 
 
-        public HttpWebRequest CreateDistimoRequest(SupportedDistimoApis supportedApi, string queryString)
+        public string CreateDistimoRequest(SupportedDistimoApis supportedApi, string queryString)
         {
             var apiAddress = DistimoAPIAddress;
 
@@ -72,7 +64,10 @@ namespace StatIt.Engine.Distimo.Services
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
             request.Headers["Authorization"] = String.Concat("Basic ", authToken.Base64Login);
 
-            return request;
+            // Execute request
+            var requestData = WebRequestService.GetWebRequest(request);
+
+            return requestData;
         }
       
 

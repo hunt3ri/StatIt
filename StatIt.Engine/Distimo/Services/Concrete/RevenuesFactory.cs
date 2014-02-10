@@ -13,12 +13,10 @@ namespace StatIt.Engine.Distimo.Services
     public class RevenuesFactory : IRevenuesFactory
     {
         private readonly IDistimoService DistimoService;
-        private readonly IWebRequestService WebRequestService;
 
-        public RevenuesFactory(IDistimoService distimoService,  IWebRequestService webRequestService)
+        public RevenuesFactory(IDistimoService distimoService)
         {
             DistimoService = distimoService;
-            WebRequestService = webRequestService;
         }
 
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
@@ -29,11 +27,13 @@ namespace StatIt.Engine.Distimo.Services
             // Round to nearest Monday so graph looks sane
             StartDate = GetNearestMonday(StartDate);
 
-            var revenueRequest = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
+            var revenueData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
             // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
 
 
-            var revenueData = WebRequestService.GetWebRequest(revenueRequest);
+            //var revenueData = WebRequestService.GetWebRequest(revenueRequest);
+
+            //var revenueData = "iain";
 
             var reader = new JsonReader();
             dynamic output = reader.Read(revenueData);
