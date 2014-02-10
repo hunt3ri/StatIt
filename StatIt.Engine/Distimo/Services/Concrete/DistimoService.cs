@@ -16,6 +16,7 @@ namespace StatIt.Engine.Distimo.Services
     public class DistimoService : IDistimoService
     {
         private static string QueryFormat = "format=json";
+        private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v4/";
         //private  string DownloadAPI;
 
         private static string DistimoPrivateKey;
@@ -27,10 +28,10 @@ namespace StatIt.Engine.Distimo.Services
 
         private readonly IWebRequestService WebRequestService;
 
-        public string DistimoAPIAddress
-        {
-            get { return "https://analytics.distimo.com/api/v4/"; }
-        }
+        //public string DistimoAPIAddress
+        //{
+        //    get { return "https://analytics.distimo.com/api/v4/"; }
+        //}
 
         public DistimoService(IWebRequestService webRequestService)
         {
@@ -45,8 +46,20 @@ namespace StatIt.Engine.Distimo.Services
         }
 
 
-        public HttpWebRequest CreateDistimoRequest(string apiAddress, string queryString)
+        public HttpWebRequest CreateDistimoRequest(SupportedDistimoApis supportedApi, string queryString)
         {
+            var apiAddress = DistimoAPIAddress;
+
+            switch (supportedApi)
+            {
+                case SupportedDistimoApis.Revenues:
+                    apiAddress = apiAddress + "revenues";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("Unexpected API value");
+
+            }
+
             // Format QueryString
             if (queryString != String.Empty)
                 queryString = queryString + "&" + QueryFormat;

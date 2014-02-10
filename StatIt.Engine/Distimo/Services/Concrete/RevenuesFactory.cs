@@ -29,7 +29,7 @@ namespace StatIt.Engine.Distimo.Services
             // Round to nearest Monday so graph looks sane
             StartDate = GetNearestMonday(StartDate);
 
-            var revenueRequest = DistimoService.CreateDistimoRequest(DistimoService.DistimoAPIAddress + "revenues", "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
+            var revenueRequest = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
             // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
 
 

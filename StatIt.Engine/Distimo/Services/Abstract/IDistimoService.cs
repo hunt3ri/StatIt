@@ -7,9 +7,7 @@ namespace StatIt.Engine.Distimo.Services
     public interface IDistimoService
     {
 
-        string DistimoAPIAddress { get; }
-
-        HttpWebRequest CreateDistimoRequest(string apiAddress, string queryString);
+        HttpWebRequest CreateDistimoRequest(SupportedDistimoApis supportedApi, string queryString);
        
     }
 }
