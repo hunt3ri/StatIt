@@ -11,22 +11,26 @@ namespace StatIt.Web.Controllers
     public class HomeController : Controller
     {
         //private readonly IDistimoService DistimoService;
-        private readonly IRevenuesService RevenuesFactory;
+        private readonly IRevenuesService RevenuesService;
 
-        public HomeController(IRevenuesService revenuesFactory)
+        public HomeController(IRevenuesService revenuesService)
         {
-            RevenuesFactory = revenuesFactory;
+            RevenuesService = revenuesService;
         }
         //
         // GET: /Home/
         public ActionResult Index()
         {
-           
-           // var eventData = DistimoService.GetEvents();
-
-           // var iain = revenueData;
             
             return View();
+        }
+
+        public JsonResult GetIAPRevenues()
+        {
+            RevenuesService.GetIAPRevenues();
+
+            var jsonData = Json("temp", JsonRequestBehavior.AllowGet);
+            return jsonData;
         }
 
         public JsonResult GetRevenues(string AppId, string DateStart, string DateEnd)
@@ -37,8 +41,7 @@ namespace StatIt.Web.Controllers
             var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture);
 
-            //var revenueData = DistimoService.GetRevenues(AppId, dateStart, dateEnd);
-            var revenueData = RevenuesFactory.GetRevenues(AppId, dateStart, dateEnd);
+            var revenueData = RevenuesService.GetRevenues(AppId, dateStart, dateEnd);
 
             var jsonData = Json(revenueData, JsonRequestBehavior.AllowGet);
 

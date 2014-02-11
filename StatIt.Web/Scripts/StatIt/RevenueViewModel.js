@@ -43,6 +43,28 @@
         });
     }
 
+    function RefreshIAPData()
+    {
+        $.ajax({
+            url: '/Home/GetIAPRevenues',
+            //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
+            beforeSend: function () {
+                $('#iapLoader').show();
+               // $('#chartContainer').hide();
+            },
+            complete: function () {
+                $('#iapLoader').hide();
+            }
+        })
+        .done(function (data) {
+            //$('#chartContainer').show();
+           // callback(data);
+        })
+        .error(function () {
+            $('#target').append('Failed');
+        });
+    }
+
     function RevenuesViewModel() {
 
         var self = this;
@@ -60,6 +82,10 @@
         self.grossRevenue = ko.observable();
         self.shareRevenue = ko.observable();
 
+        var iapFunction = function () {
+            RefreshIAPData();
+        }
+
         var revFunction = function () {
             RefreshData(self.dateStart(), self.dateEnd(), function (data) {
                 self.revenues(data.RevenueByWeek);
@@ -73,6 +99,7 @@
         self.refreshData = revFunction;
 
         // Init graphs with default values
+        iapFunction.call();
         revFunction.call();
 
     }

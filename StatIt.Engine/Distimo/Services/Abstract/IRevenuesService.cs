@@ -4,6 +4,7 @@ namespace StatIt.Engine.Distimo.Services
 {
     public interface IRevenuesService
     {
+        void GetIAPRevenues();
         RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate);
     }
 }

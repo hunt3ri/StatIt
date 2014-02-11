@@ -19,6 +19,11 @@ namespace StatIt.Engine.Distimo.Services
             DistimoService = distimoService;
         }
 
+        public void GetIAPRevenues()
+        {
+
+        }
+
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
             // from=all&revenue=total&view=line&breakdown=application,appstore
