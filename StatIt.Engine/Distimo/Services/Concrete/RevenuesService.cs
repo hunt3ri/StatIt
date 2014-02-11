@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace StatIt.Engine.Distimo.Services
 {
-    public class RevenuesService : IRevenuesFactory
+    public class RevenuesService : IRevenuesService
     {
         private readonly IDistimoService DistimoService;
 

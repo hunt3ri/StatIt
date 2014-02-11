@@ -11,9 +11,9 @@ namespace StatIt.Web.Controllers
     public class HomeController : Controller
     {
         //private readonly IDistimoService DistimoService;
-        private readonly IRevenuesFactory RevenuesFactory;
+        private readonly IRevenuesService RevenuesFactory;
 
-        public HomeController(IRevenuesFactory revenuesFactory)
+        public HomeController(IRevenuesService revenuesFactory)
         {
             RevenuesFactory = revenuesFactory;
         }

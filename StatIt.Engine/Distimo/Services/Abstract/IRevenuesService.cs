@@ -2,7 +2,7 @@
 using System;
 namespace StatIt.Engine.Distimo.Services
 {
-    public interface IRevenuesFactory
+    public interface IRevenuesService
     {
         RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate);
     }
