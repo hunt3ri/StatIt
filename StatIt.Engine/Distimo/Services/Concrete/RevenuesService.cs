@@ -19,9 +19,9 @@ namespace StatIt.Engine.Distimo.Services
             DistimoService = distimoService;
         }
 
-        public void GetIAPRevenues()
+        public void GetIAPRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
-
+            var test = StartDate;
         }
 
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)

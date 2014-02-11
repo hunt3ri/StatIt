@@ -43,10 +43,10 @@
         });
     }
 
-    function RefreshIAPData()
+    function RefreshIAPData(dateStart, dateEnd)
     {
         $.ajax({
-            url: '/Home/GetIAPRevenues',
+            url: '/Home/GetIAPRevenues?appId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
             //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
             beforeSend: function () {
                 $('#iapLoader').show();
@@ -83,7 +83,7 @@
         self.shareRevenue = ko.observable();
 
         var iapFunction = function () {
-            RefreshIAPData();
+            RefreshIAPData(self.dateStart(), self.dateEnd());
         }
 
         var revFunction = function () {

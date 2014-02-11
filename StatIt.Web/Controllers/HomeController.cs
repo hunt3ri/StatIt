@@ -25,9 +25,14 @@ namespace StatIt.Web.Controllers
             return View();
         }
 
-        public JsonResult GetIAPRevenues()
+        public JsonResult GetIAPRevenues(string AppId, string DateStart, string DateEnd)
         {
-            RevenuesService.GetIAPRevenues();
+            var dateStart = DateTime.ParseExact(DateStart, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+            var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+            RevenuesService.GetIAPRevenues(AppId, dateStart, dateEnd);
 
             var jsonData = Json("temp", JsonRequestBehavior.AllowGet);
             return jsonData;
