@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StatIt.Engine.Distimo.Services
@@ -21,7 +22,15 @@ namespace StatIt.Engine.Distimo.Services
 
         public void GetIAPRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
-            var test = StartDate;
+            // Round to nearest Monday so graph looks sane
+            StartDate = GetNearestMonday(StartDate);
+
+            // Sleep on thread so not hitting API with simulatenous requests
+            Thread.Sleep(1000);
+
+            var appStoreData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=all&revenue=total&view=line&breakdown=application,appstore");
+
+
         }
 
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
@@ -35,10 +44,6 @@ namespace StatIt.Engine.Distimo.Services
             var revenueData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
             // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
 
-
-            //var revenueData = WebRequestService.GetWebRequest(revenueRequest);
-
-            //var revenueData = "iain";
 
             var reader = new JsonReader();
             dynamic output = reader.Read(revenueData);
