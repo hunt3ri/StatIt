@@ -30,7 +30,48 @@ namespace StatIt.Engine.Distimo.Services
 
             var appStoreData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=all&revenue=total&view=line&breakdown=application,appstore");
 
+            var reader = new JsonReader();
+            dynamic output = reader.Read(appStoreData);
 
+            var appIds = GetApplicationIds(output);
+
+            var assetData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.FilterAssetRevenues, string.Empty);
+            //var assetData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Assets, string.Empty);
+
+            dynamic rawAssetData = reader.Read(assetData);
+
+            var iapList = new List<string>();
+
+            foreach (dynamic row in rawAssetData)
+            {
+                if (appIds.Contains(row.Value.parent_id))
+                    iapList.Add(row.Key);
+
+            }
+
+            var iain = iapList;
+
+
+
+        }
+
+        /// <summary>
+        /// This class extracts the Distimo applicationIds from the raw data
+        /// </summary>
+        /// <param name="jsonData"></param>
+        private List<string> GetApplicationIds(dynamic distimoData)
+        {
+            var applicationIds = new List<string>();
+
+            foreach (dynamic line in distimoData.lines)
+            {
+                 string appName = line.data.application;
+
+                 if (appName.Contains("Winx Fairy School"))
+                     applicationIds.Add(line.data.application_id);
+            }
+
+            return applicationIds;  
         }
 
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)

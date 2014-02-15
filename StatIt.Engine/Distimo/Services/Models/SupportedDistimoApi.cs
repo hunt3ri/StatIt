@@ -8,6 +8,8 @@ namespace StatIt.Engine.Distimo.Services.Models
 {
     public enum SupportedDistimoApis
     {
-        Revenues
+        Revenues,
+        FilterAssetRevenues,
+        Assets
     }
 }

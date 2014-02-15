@@ -47,6 +47,12 @@ namespace StatIt.Engine.Distimo.Services
                 case SupportedDistimoApis.Revenues:
                     apiAddress = apiAddress + "revenues";
                     break;
+                case SupportedDistimoApis.FilterAssetRevenues:
+                    apiAddress = apiAddress + "filters/assets/revenues";
+                    break;
+                case SupportedDistimoApis.Assets:
+                    apiAddress = apiAddress + "assets/app";
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("Unexpected API value");
 
