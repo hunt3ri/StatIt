@@ -28,42 +28,55 @@ namespace StatIt.Engine.Distimo.Services
             // Sleep on thread so not hitting API with simulatenous requests
             Thread.Sleep(1000);
 
-            var appStoreData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=all&revenue=total&view=line&breakdown=application,appstore");
+            var appIds = GetApplicationIds();
 
-            var reader = new JsonReader();
-            dynamic output = reader.Read(appStoreData);
+            var iapIds = GetIAPIds(appIds);
 
-            var appIds = GetApplicationIds(output);
+            
 
-            var assetData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.FilterAssetRevenues, string.Empty);
-            //var assetData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Assets, string.Empty);
-
-            dynamic rawAssetData = reader.Read(assetData);
-
-            var iapList = new List<string>();
-
-            foreach (dynamic row in rawAssetData)
-            {
-                if (appIds.Contains(row.Value.parent_id))
-                    iapList.Add(row.Key);
-
-            }
-
-            var iain = iapList;
 
 
 
         }
 
         /// <summary>
+        /// Get a list of all IAP ids that belong to one of the parent applications
+        /// </summary>
+        /// <param name="parentIds">List of Distimo appIds</param>
+        /// <returns></returns>
+        private List<string> GetIAPIds(List<string> parentIds)
+        {
+            var assetData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.FilterAssetRevenues, string.Empty);
+
+            var reader = new JsonReader();
+            dynamic rawAssetData = reader.Read(assetData);
+
+            var iapList = new List<string>();
+
+            foreach (dynamic row in rawAssetData)
+            {
+                if (parentIds.Contains(row.Value.parent_id))
+                    iapList.Add(row.Key);
+
+            }
+
+            return iapList;
+        }
+
+        /// <summary>
         /// This class extracts the Distimo applicationIds from the raw data
         /// </summary>
         /// <param name="jsonData"></param>
-        private List<string> GetApplicationIds(dynamic distimoData)
+        private List<string> GetApplicationIds()
         {
+            var appStoreData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=all&revenue=total&view=line&breakdown=application,appstore");
+
+            var reader = new JsonReader();
+            dynamic apps = reader.Read(appStoreData);
+
             var applicationIds = new List<string>();
 
-            foreach (dynamic line in distimoData.lines)
+            foreach (dynamic line in apps.lines)
             {
                  string appName = line.data.application;
 
