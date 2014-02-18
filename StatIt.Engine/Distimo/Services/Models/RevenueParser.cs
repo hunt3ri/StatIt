@@ -25,5 +25,31 @@ namespace StatIt.Engine.Distimo.Services.Models
             CleanRevenueData = new Dictionary<string, List<int>>();
 
         }
+
+        public void AddRawRevenueData(string Appstore, List<int> Datapoints, string Application)
+        {
+
+            if (RawRevenueData.ContainsKey(Appstore))
+                MergeRawData(Appstore, Datapoints, Application);
+            else
+                RawRevenueData.Add(Appstore, Datapoints);
+        }
+
+        private void MergeRawData(string Appstore, List<int> Datapoints, string Application)
+        {
+            var currentData = RawRevenueData[Appstore];
+
+            //if (currentData.Count() != Datapoints.Count())
+            //    throw new ArgumentOutOfRangeException("Number of datapoints differ HELP!!");
+
+            for (int i = 0; i < Datapoints.Count(); i++)
+            {
+                currentData[i] = currentData[i] + Datapoints[i];
+            }
+
+            // overwrite with new data
+            RawRevenueData[Appstore] = currentData;
+
+        }
     }
 }

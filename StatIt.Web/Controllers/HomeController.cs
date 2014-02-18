@@ -32,9 +32,9 @@ namespace StatIt.Web.Controllers
             var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
                                        System.Globalization.CultureInfo.InvariantCulture);
 
-            RevenuesService.GetIAPRevenues(AppId, dateStart, dateEnd);
+            var iapData = RevenuesService.GetIAPRevenues(AppId, dateStart, dateEnd);
 
-            var jsonData = Json("temp", JsonRequestBehavior.AllowGet);
+            var jsonData = Json(iapData, JsonRequestBehavior.AllowGet);
             return jsonData;
         }
 

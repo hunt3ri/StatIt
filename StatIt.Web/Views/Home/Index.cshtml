@@ -65,12 +65,49 @@
                 </div>
             </div>
 
-                </div>
+       </div>
                 `   <div class="col-md-6">
-                    <p>Today's message is: <span data-bind="text: myMessage"></span></p>
+                        <div id="iapWeekChart" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+    dataSource: iapRevenues,
+    commonSeriesSettings: {
+        argumentField: 'Week',
+        type: 'stackedBar',
+        label: {
+            visible: true,
+            format: 'currency',
+            showForZeroValues: false
+        }
+    },
+    series: [
+        { valueField: 'Amazon', name: 'Amazon' },
+        { valueField: 'Apple', name: 'Apple' },
+        { valueField: 'Google', name: 'Google' }
+    ],
+    legend: {
+        verticalAlignment: 'bottom',
+        horizontalAlignment: 'center'
+    },
+    title: {
+        text: 'Weekly IAP Revenues'
+    }}"></div>
+
                         <div id="iapLoader">
                             <img src="/Content/images/ajax-loader.gif" />
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>
+                                    Total Revenue: <strong>$<span data-bind=""></span></strong>
+                                </h4>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>
+                                    Share Revenue: <strong style="color: #33CC33; ">$<span data-bind=""></span></strong>
+                                </h4>
+                            </div>
+                        </div>
+                       
                 </div>
 
             </div>

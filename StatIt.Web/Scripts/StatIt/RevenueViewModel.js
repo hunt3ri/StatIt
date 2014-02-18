@@ -43,22 +43,22 @@
         });
     }
 
-    function RefreshIAPData(dateStart, dateEnd)
+    function RefreshIAPData(dateStart, dateEnd, callback)
     {
         $.ajax({
             url: '/Home/GetIAPRevenues?appId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
             //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
             beforeSend: function () {
                 $('#iapLoader').show();
-               // $('#chartContainer').hide();
+                $('#iapWeekChart').hide();
             },
             complete: function () {
                 $('#iapLoader').hide();
             }
         })
         .done(function (data) {
-            //$('#chartContainer').show();
-           // callback(data);
+            $('#iapWeekChart').show();
+            callback(data);
         })
         .error(function () {
             $('#target').append('Failed');
@@ -79,11 +79,14 @@
         self.dateStart = ko.observable(fromDate);
         self.dateEnd = ko.observable(toDate);
         self.revenues = ko.observableArray();
+        self.iapRevenues = ko.observableArray();
         self.grossRevenue = ko.observable();
         self.shareRevenue = ko.observable();
 
         var iapFunction = function () {
-            RefreshIAPData(self.dateStart(), self.dateEnd());
+            RefreshIAPData(self.dateStart(), self.dateEnd(), function (data) {
+                self.iapRevenues(data.RevenueByWeek);
+            });
         }
 
         var revFunction = function () {
