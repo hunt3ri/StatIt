@@ -1,5 +1,6 @@
 ﻿using StatIt.Engine.Distimo.Services;
 using StatIt.Engine.Distimo.Services.Models;
+using StatIt.Engine.Flurry.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,19 @@ namespace StatIt.Web.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly IDistimoService DistimoService;
         private readonly IRevenuesService RevenuesService;
+        private readonly IFlurryService FlurryService;
 
-        public HomeController(IRevenuesService revenuesService)
+        public HomeController(IRevenuesService revenuesService, IFlurryService flurryService)
         {
             RevenuesService = revenuesService;
+            FlurryService = flurryService;
         }
         //
         // GET: /Home/
         public ActionResult Index()
         {
-            
+            FlurryService.GetActiveUsersByWeek();
             return View();
         }
 

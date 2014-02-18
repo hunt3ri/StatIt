@@ -63,6 +63,9 @@
     <Compile Include="Distimo\Services\Models\RevenueByWeek.cs" />
     <Compile Include="Distimo\Services\Models\RevenueModel.cs" />
     <Compile Include="Distimo\Services\Models\RevenueParser.cs" />
+    <Compile Include="Flurry\Config\FlurryInstaller.cs" />
+    <Compile Include="Flurry\Services\Abstract\IFlurryService.cs" />
+    <Compile Include="Flurry\Services\Concrete\FlurryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\Config\WebInstaller.cs" />
     <Compile Include="Web\Services\Abstract\IWebRequestService.cs" />
@@ -77,6 +80,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
