@@ -100,13 +100,15 @@
                 self.grossRevenue(data.GrossRevenue);
                 self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
             });
+
+            iapFunction.call();
         };
 
         // Click handler for refresh button
         self.refreshData = revFunction;
 
         // Init graphs with default values
-        iapFunction.call();
+        //iapFunction.call();
         revFunction.call();
 
     }

@@ -36,8 +36,10 @@
         label: {
             visible: true,
             format: 'currency',
+            customizeText: function () {
+                return '£' + this.value; },
             showForZeroValues: false
-        }
+            }
     },
     series: [
         { valueField: 'Amazon', name: 'Amazon' },
@@ -56,12 +58,12 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>
-                    Total Revenue: <strong>$<span data-bind="text: grossRevenue"></span></strong>
+                    Total Revenue: <strong>£<span data-bind="text: grossRevenue"></span></strong>
                 </h4>
             </div>
             <div class="col-md-6">
                 <h4>
-                    Share Revenue: <strong style="color: #33CC33; ">$<span data-bind="text: shareRevenue"></span></strong>
+                    Share Revenue: <strong style="color: #33CC33; ">£<span data-bind="text: shareRevenue"></span></strong>
                 </h4>
             </div>
         </div>
@@ -83,6 +85,8 @@
         label: {
             visible: true,
             format: 'currency',
+            customizeText: function () {
+                return '£' + this.value; },
             showForZeroValues: false
         }
     },
@@ -102,12 +106,12 @@
         <div class="row">
             <div class="col-md-6">
                 <h4>
-                    Total Revenue: <strong>$<span data-bind="text: iapGrossRevenue"></span></strong>
+                    Total Revenue: <strong>£<span data-bind="text: iapGrossRevenue"></span></strong>
                 </h4>
             </div>
             <div class="col-md-6">
                 <h4>
-                    Share Revenue: <strong style="color: #33CC33; ">$<span data-bind="text: iapShareRevenue"></span></strong>
+                    Share Revenue: <strong style="color: #33CC33; ">£<span data-bind="text: iapShareRevenue"></span></strong>
                 </h4>
             </div>
         </div>
