@@ -20,12 +20,15 @@
 
 
 
-    <div class="row">
-        <div class="col-md-6">
+<div class="row">
+    <!--Revenues Container-->
+    <div class="col-md-6">
 
+        <div id="loading">
+            <img src="/Content/images/ajax-loader.gif" />
+        </div>
 
-
-            <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+        <div id="chartContainer" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: revenues,
     commonSeriesSettings: {
         argumentField: 'Week',
@@ -50,24 +53,29 @@
     }}"></div>
 
 
-            <div id="loading">
-                <img src="/Content/images/ajax-loader.gif" />
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    Total Revenue: <strong>$<span data-bind="text: grossRevenue"></span></strong>
+                </h4>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>
-                        Total Revenue: <strong>$<span data-bind="text: grossRevenue"></span></strong> </h4>
-                </div>
-                <div class="col-md-6">
-                        <h4>
-                        Share Revenue: <strong style="color: #33CC33; ">$<span data-bind="text: shareRevenue"></span></strong>
-                        </h4>
-                </div>
+            <div class="col-md-6">
+                <h4>
+                    Share Revenue: <strong style="color: #33CC33; ">$<span data-bind="text: shareRevenue"></span></strong>
+                </h4>
             </div>
+        </div>
 
-       </div>
-                `   <div class="col-md-6">
-                        <div id="iapWeekChart" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+    </div> <!--Revenues Container Close-->
+
+    <!--IAP Revenues Container-->
+    <div class="col-md-6">
+
+        <div id="iapLoader">
+            <img src="/Content/images/ajax-loader.gif" />
+        </div>
+
+        <div id="iapWeekChart" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: iapRevenues,
     commonSeriesSettings: {
         argumentField: 'Week',
@@ -91,78 +99,26 @@
         text: 'Weekly IAP Revenues'
     }}"></div>
 
-                        <div id="iapLoader">
-                            <img src="/Content/images/ajax-loader.gif" />
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4>
-                                    Total Revenue: <strong>$<span data-bind=""></span></strong>
-                                </h4>
-                            </div>
-                            <div class="col-md-6">
-                                <h4>
-                                    Share Revenue: <strong style="color: #33CC33; ">$<span data-bind=""></span></strong>
-                                </h4>
-                            </div>
-                        </div>
-                       
-                </div>
-
+        <div class="row">
+            <div class="col-md-6">
+                <h4>
+                    Total Revenue: <strong>$<span data-bind="text: iapGrossRevenue"></span></strong>
+                </h4>
             </div>
+            <div class="col-md-6">
+                <h4>
+                    Share Revenue: <strong style="color: #33CC33; ">$<span data-bind="text: iapShareRevenue"></span></strong>
+                </h4>
+            </div>
+        </div>
 
-            @*<div class="row" data-bind="template: { name: 'revenue-template', foreach: revenues }">
+    </div>  <!--IAP Revenues Container Container -->
+</div>
 
-            </div>*@
+           
 
-            @section Scripts {
-
-                @*<script type="text/html" id="download-template">
-
-                    <li>
-                        Application <span data-bind="text: data.application"> </span>
-                    </li>
-
-                </script>
-
-                <script type="text/html" id="revenue-template">
-                    <div class="col-md-3">
-                        <h2 data-bind="text: data.application"></h2>
-                        <h3 data-bind="text: data.appstore"></h3>
-                        <h3 data-bind="text: points"></h3>
-                    </div>
-                </script>*@
-
-                <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
-
-                @*<script>
-
-                    $(document).ready(function () {
-
-                        function DownloadsViewModel() {
-                            var self = this;
-                            self.downloads = ko.observableArray();
-
-                            $.ajax({
-                                url: '/Home/GetDownloads',
-                                beforeSend: function () { $('#loading').show(); },
-                                complete: function () { $('#loading').hide(); }
-                            })
-                            .done(function (data) {
-                                var parsedJson = JSON.parse(data);
-                                self.downloads(parsedJson.lines);
-                            })
-                            .error(function () {
-                                $('#target').append('Failed');
-                            })
-                        }
-
-                       // ko.applyBindings(new DownloadsViewModel());
-
-
-                    });
-                </script>*@
-            }
+@section Scripts {
+    <script src="/Scripts/StatIt/RevenueViewModel.js"></script>
+}
 
 

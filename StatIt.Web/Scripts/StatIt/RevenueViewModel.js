@@ -80,12 +80,16 @@
         self.dateEnd = ko.observable(toDate);
         self.revenues = ko.observableArray();
         self.iapRevenues = ko.observableArray();
+        self.iapGrossRevenue = ko.observable();
+        self.iapShareRevenue = ko.observable();
         self.grossRevenue = ko.observable();
         self.shareRevenue = ko.observable();
 
         var iapFunction = function () {
             RefreshIAPData(self.dateStart(), self.dateEnd(), function (data) {
                 self.iapRevenues(data.RevenueByWeek);
+                self.iapGrossRevenue(data.GrossRevenue);
+                self.iapShareRevenue((data.GrossRevenue * 0.7).toFixed(2));
             });
         }
 
