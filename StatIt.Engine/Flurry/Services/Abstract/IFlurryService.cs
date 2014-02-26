@@ -8,6 +8,6 @@ namespace StatIt.Engine.Flurry.Services
 {
     public interface IFlurryService
     {
-        void GetActiveUsersByWeek();
+        void GetActiveUsers();
     }
 }

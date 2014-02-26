@@ -23,7 +23,7 @@ namespace StatIt.Web.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            FlurryService.GetActiveUsersByWeek();
+            FlurryService.GetActiveUsers();
             return View();
         }
 
