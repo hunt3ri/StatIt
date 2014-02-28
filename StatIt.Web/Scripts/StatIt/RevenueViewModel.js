@@ -65,6 +65,28 @@
         });
     }
 
+    function RefreshDauData(callback)
+    {
+        $.ajax({
+            url: '/Home/GetDAU',
+            //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
+            beforeSend: function () {
+               // $('#iapLoader').show();
+               // $('#iapWeekChart').hide();
+            },
+            complete: function () {
+               // $('#iapLoader').hide();
+            }
+        })
+        .done(function (data) {
+           // $('#iapWeekChart').show();
+            callback(data);
+        })
+        .error(function () {
+            $('#target').append('Failed');
+        });
+    }
+
     function RevenuesViewModel() {
 
         var self = this;
@@ -85,11 +107,19 @@
         self.grossRevenue = ko.observable();
         self.shareRevenue = ko.observable();
 
+        self.dau = ko.observableArray();
+
         var iapFunction = function () {
             RefreshIAPData(self.dateStart(), self.dateEnd(), function (data) {
                 self.iapRevenues(data.RevenueByWeek);
                 self.iapGrossRevenue(data.GrossRevenue);
                 self.iapShareRevenue((data.GrossRevenue * 0.7).toFixed(2));
+            });
+        }
+
+        var dauFunction = function () {
+            RefreshDauData(function (data) {
+                self.dau(data.DailyActiveUsers);
             });
         }
 
@@ -101,7 +131,8 @@
                 self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
             });
 
-            iapFunction.call();
+            //iapFunction.call();
+            dauFunction.call();
         };
 
         // Click handler for refresh button

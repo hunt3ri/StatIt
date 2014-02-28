@@ -23,8 +23,16 @@ namespace StatIt.Web.Controllers
         // GET: /Home/
         public ActionResult Index()
         {
-            FlurryService.GetActiveUsers();
             return View();
+        }
+
+        public JsonResult GetDAU()
+        {
+            var dauData = FlurryService.GetActiveUsers();
+
+            var jsonData = Json(dauData, JsonRequestBehavior.AllowGet);
+
+            return jsonData;
         }
 
         public JsonResult GetIAPRevenues(string AppId, string DateStart, string DateEnd)

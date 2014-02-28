@@ -16,6 +16,7 @@ namespace StatIt.Engine.Flurry.Services
 
         private readonly string FlurryAPIAccessCode;
         private readonly string WFSiOSCode;
+        private readonly string WFSAndroidCode;
 
         public FlurryService(IWebRequestService webRequestService)
         {
@@ -23,39 +24,66 @@ namespace StatIt.Engine.Flurry.Services
 
             FlurryAPIAccessCode = APIKeys.FlurryAPIAccessCode;
             WFSiOSCode = APIKeys.FlurryWFSiOSKey;
+            WFSAndroidCode = APIKeys.FlurryWFSAndroidKey;
         }
 
-        public void GetActiveUsers()
+        public DAUDisplayModel GetActiveUsers()
         {
-            var url = "http://api.flurry.com/appMetrics/ActiveUsers?apiAccessCode=" + FlurryAPIAccessCode + "&apiKey=" + WFSiOSCode + "&startDate=2013-12-09&endDate=2014-02-19";
+
+            var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode);
+
+            var iosModelData = PopulateModel(iosDauData, new Dictionary<string,DailyActiveUsersModel>(), true);
+
+            var androidDauData = CreateFlurryActiveUsersRequest(WFSAndroidCode);
+
+            var modelData = PopulateModel(androidDauData, iosModelData, false);
+
+            var displayModel = new DAUDisplayModel(modelData);
+
+            return displayModel;
+        }
+
+        private dynamic CreateFlurryActiveUsersRequest(string APIKey)
+        {
+            var url = "http://api.flurry.com/appMetrics/ActiveUsers?apiAccessCode=" + FlurryAPIAccessCode + "&apiKey=" + APIKey + "&startDate=2013-12-09&endDate=2014-02-19";
 
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
             request.Accept = "application/json";
 
             // Execute request
             var rawDauData = WebRequestService.GetWebRequest(request);
-            var iain = rawDauData.Replace("@", String.Empty);
+            
+            var cleanData = rawDauData.Replace("@", String.Empty); // Remove @ symbols from fieldnames
 
             var reader = new JsonReader();
-            dynamic dauData = reader.Read(iain);
+            dynamic dauData = reader.Read(cleanData);
 
-            PopulateModel(dauData);
+            return dauData;
 
         }
 
-        private void PopulateModel(dynamic dauData)
+        private Dictionary<string, DailyActiveUsersModel> PopulateModel(dynamic dauData, Dictionary<string, DailyActiveUsersModel> dauDict, bool isIosData)
         {
-            var dauModel = new List<DailyActiveUsersModel>();
             foreach (dynamic datapoint in dauData.day)
             {
                 var model = new DailyActiveUsersModel();
                 
                 model.DAUDate = datapoint.date;
-                model.iOSUsers = Convert.ToInt32(datapoint.value);
 
-                dauModel.Add(model);
-
+                // First run is iOS so add data, then insert Android values on second run
+                if (isIosData)
+                {
+                    model.iOSUsers = Convert.ToInt32(datapoint.value);
+                    dauDict.Add(model.DAUDate, model);
+                }
+                else
+                {
+                    dauDict[model.DAUDate].AndroidUsers = Convert.ToInt32(datapoint.value);
+                }
+                    
             }
+
+            return dauDict;
         }
     }
 }
