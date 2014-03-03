@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatIt.Web", "StatIt.Web\StatIt.Web.csproj", "{85739874-EAE4-4C16-8182-FE357C526A60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatIt.Engine", "StatIt.Engine\StatIt.Engine.csproj", "{96A17EA1-1D99-480A-9853-66611026AD22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatIt.Tests", "StatIt.Tests\StatIt.Tests.csproj", "{8252A8ED-0C78-4097-81F1-7D6324E423F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{96A17EA1-1D99-480A-9853-66611026AD22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96A17EA1-1D99-480A-9853-66611026AD22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96A17EA1-1D99-480A-9853-66611026AD22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8252A8ED-0C78-4097-81F1-7D6324E423F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8252A8ED-0C78-4097-81F1-7D6324E423F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8252A8ED-0C78-4097-81F1-7D6324E423F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8252A8ED-0C78-4097-81F1-7D6324E423F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

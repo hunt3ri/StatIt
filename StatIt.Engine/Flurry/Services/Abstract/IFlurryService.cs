@@ -9,6 +9,7 @@ namespace StatIt.Engine.Flurry.Services
 {
     public interface IFlurryService
     {
-        DAUDisplayModel GetActiveUsers();
+        DAUDisplayModel GetActiveUsers(DateTime DateStart, DateTime DateEnd);
+        void GetMAU();
     }
 }

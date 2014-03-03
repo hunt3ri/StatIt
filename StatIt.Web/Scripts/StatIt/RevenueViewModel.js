@@ -65,10 +65,10 @@
         });
     }
 
-    function RefreshDauData(callback)
+    function RefreshDauData(dateStart, dateEnd, callback)
     {
         $.ajax({
-            url: '/Home/GetDAU',
+            url: '/Home/GetDAU?dateStart=' + dateStart + '&dateEnd=' + dateEnd,
             //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
             beforeSend: function () {
                // $('#iapLoader').show();
@@ -118,7 +118,7 @@
         }
 
         var dauFunction = function () {
-            RefreshDauData(function (data) {
+            RefreshDauData(self.dateStart(), self.dateEnd(), function (data) {
                 self.dau(data.DailyActiveUsers);
             });
         }

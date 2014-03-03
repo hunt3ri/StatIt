@@ -27,14 +27,25 @@ namespace StatIt.Engine.Flurry.Services
             WFSAndroidCode = APIKeys.FlurryWFSAndroidKey;
         }
 
-        public DAUDisplayModel GetActiveUsers()
+        public void GetMAU()
+        {
+            var DateStart = DateTime.Now;
+            DateStart = DateStart.AddDays(-30);
+
+            var DateEnd = DateTime.Now;
+
+
+            var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode, DateStart, DateEnd);
+        }
+
+        public DAUDisplayModel GetActiveUsers(DateTime DateStart, DateTime DateEnd)
         {
 
-            var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode);
+            var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode, DateStart, DateEnd);
 
             var iosModelData = PopulateModel(iosDauData, new Dictionary<string,DailyActiveUsersModel>(), true);
 
-            var androidDauData = CreateFlurryActiveUsersRequest(WFSAndroidCode);
+            var androidDauData = CreateFlurryActiveUsersRequest(WFSAndroidCode, DateStart, DateEnd);
 
             var modelData = PopulateModel(androidDauData, iosModelData, false);
 
@@ -43,9 +54,9 @@ namespace StatIt.Engine.Flurry.Services
             return displayModel;
         }
 
-        private dynamic CreateFlurryActiveUsersRequest(string APIKey)
+        private dynamic CreateFlurryActiveUsersRequest(string APIKey, DateTime DateStart, DateTime DateEnd)
         {
-            var url = "http://api.flurry.com/appMetrics/ActiveUsers?apiAccessCode=" + FlurryAPIAccessCode + "&apiKey=" + APIKey + "&startDate=2013-12-09&endDate=2014-02-19";
+            var url = "http://api.flurry.com/appMetrics/ActiveUsers?apiAccessCode=" + FlurryAPIAccessCode + "&apiKey=" + APIKey + "&startDate=" + DateStart.ToString("yyyy-MM-dd") + "&endDate=" + DateEnd.ToString("yyyy-MM-dd");
 
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
             request.Accept = "application/json";

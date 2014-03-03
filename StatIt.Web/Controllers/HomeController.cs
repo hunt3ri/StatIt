@@ -26,9 +26,15 @@ namespace StatIt.Web.Controllers
             return View();
         }
 
-        public JsonResult GetDAU()
+        public JsonResult GetDAU(string DateStart, string DateEnd)
         {
-            var dauData = FlurryService.GetActiveUsers();
+            var dateStart = DateTime.ParseExact(DateStart, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+            var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+
+            var dauData = FlurryService.GetActiveUsers(dateStart, dateEnd);
 
             var jsonData = Json(dauData, JsonRequestBehavior.AllowGet);
 
