@@ -55,6 +55,8 @@
     </Compile>
     <Compile Include="Distimo\Config\DistimoInstaller.cs" />
     <Compile Include="Distimo\Models\DistimoAuthToken.cs" />
+    <Compile Include="Distimo\Services\Abstract\IDistimoAuthService.cs" />
+    <Compile Include="Distimo\Services\Concrete\DistimoAuthService.cs" />
     <Compile Include="Distimo\Services\Concrete\DistimoService.cs" />
     <Compile Include="Distimo\Services\Abstract\IDistimoService.cs" />
     <Compile Include="Distimo\Services\Abstract\IRevenuesService.cs" />

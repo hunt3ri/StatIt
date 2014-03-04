@@ -28,7 +28,7 @@ namespace StatIt.Engine.Distimo.Services
             // Round to nearest Monday so graph looks sane
             StartDate = GetNearestMonday(StartDate);
 
-            var revenueData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
+            var revenueData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
             // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
 
 
@@ -65,7 +65,7 @@ namespace StatIt.Engine.Distimo.Services
 
             //GetIAPData(StartDate, EndDate);
 
-            var iapData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&metrics=in_app&view=line&breakdown=application,appstore,date&interval=week");
+            var iapData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&metrics=in_app&view=line&breakdown=application,appstore,date&interval=week");
 
             var reader = new JsonReader();
             dynamic rawIAPData = reader.Read(iapData);
@@ -86,7 +86,7 @@ namespace StatIt.Engine.Distimo.Services
 
         private void GetIAPData(DateTime StartDate, DateTime EndDate)
         {
-            var iapData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&metrics=in_app&view=line&breakdown=application,appstore,date&interval=week");
+            var iapData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&metrics=in_app&view=line&breakdown=application,appstore,date&interval=week");
 
             var reader = new JsonReader();
             dynamic rawAssetData = reader.Read(iapData);
@@ -103,7 +103,7 @@ namespace StatIt.Engine.Distimo.Services
         /// <returns>List of IAP Distimo ids</returns>
         private List<string> GetIAPIds(List<string> parentIds)
         {
-            var assetData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.FilterAssetRevenues, string.Empty);
+            var assetData = DistimoService.GetDistimoData(SupportedDistimoApis.FilterAssetRevenues, string.Empty);
 
             var reader = new JsonReader();
             dynamic rawAssetData = reader.Read(assetData);
@@ -125,7 +125,7 @@ namespace StatIt.Engine.Distimo.Services
         /// </summary>
         private List<string> GetApplicationIds()
         {
-            var appStoreData = DistimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, "from=all&revenue=total&view=line&breakdown=application,appstore");
+            var appStoreData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=all&revenue=total&view=line&breakdown=application,appstore");
 
             var reader = new JsonReader();
             dynamic apps = reader.Read(appStoreData);

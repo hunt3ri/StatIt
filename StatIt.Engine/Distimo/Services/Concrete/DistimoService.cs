@@ -15,32 +15,54 @@ namespace StatIt.Engine.Distimo.Services
 {
     public class DistimoService : IDistimoService
     {
-        private static string QueryFormat = "format=json";
-        private static string DistimoAPIAddress = "https://analytics.distimo.com/api/v4/";
+        public string DistimoAPIBaseAddress = "https://analytics.distimo.com/api/v4/";
 
-        private static string DistimoPrivateKey;
-        private static string DistimoPublicKey;
-        private static string DistimoUserName; 
-        private static string DistimoPassword;
+        private static string QueryFormat = "format=json";
 
         private readonly IWebRequestService WebRequestService;
+        private readonly IDistimoAuthService DistimoAuthService;
 
-
-        public DistimoService(IWebRequestService webRequestService)
+        public DistimoService(IWebRequestService webRequestService, IDistimoAuthService distimoAuthService)
         {
-
             WebRequestService = webRequestService;
-
-            DistimoPrivateKey = APIKeys.DistimoPrivateKey;
-            DistimoPublicKey = APIKeys.DistimoPublicKey;
-            DistimoUserName = APIKeys.DistimoUserName;
-            DistimoPassword = APIKeys.DistimoPassword;
+            DistimoAuthService = distimoAuthService;
         }
 
 
-        public string CreateDistimoRequest(SupportedDistimoApis supportedApi, string queryString)
+        public string GetDistimoData(SupportedDistimoApis supportedApi, string queryString)
         {
-            var apiAddress = DistimoAPIAddress;
+            var request = CreateDistimoRequest(supportedApi, queryString);
+
+            // Execute request
+            var requestData = WebRequestService.GetWebRequest(request);
+
+            return requestData;
+        }
+
+        public HttpWebRequest CreateDistimoRequest(SupportedDistimoApis supportedApi, string queryString)
+        {
+            var apiAddress = GetDistimoAPIAddress(supportedApi);
+
+            // Format QueryString
+            if (queryString != String.Empty)
+                queryString = queryString + "&" + QueryFormat;
+            else
+                queryString = queryString + QueryFormat;
+
+            var authToken = CreateAuthToken(queryString);
+
+            string url = apiAddress + "?" + queryString + "&apikey=" + DistimoAuthService.DistimoPublicKey + "&hash=" + authToken.AuthHash + "&t=" + authToken.Time;
+            var request = HttpWebRequest.Create(url) as HttpWebRequest;
+            request.Headers["Authorization"] = String.Concat("Basic ", authToken.Base64Login);
+
+            return request;
+
+        }
+
+
+        public string GetDistimoAPIAddress(SupportedDistimoApis supportedApi)
+        {
+            var apiAddress = DistimoAPIBaseAddress;
 
             switch (supportedApi)
             {
@@ -58,23 +80,9 @@ namespace StatIt.Engine.Distimo.Services
 
             }
 
-            // Format QueryString
-            if (queryString != String.Empty)
-                queryString = queryString + "&" + QueryFormat;
-            else
-                queryString = queryString + QueryFormat;
-
-            var authToken = CreateAuthToken(queryString);
-
-            string url = apiAddress + "?" + queryString + "&apikey=" + DistimoPublicKey + "&hash=" + authToken.AuthHash + "&t=" + authToken.Time + queryString;
-            var request = HttpWebRequest.Create(url) as HttpWebRequest;
-            request.Headers["Authorization"] = String.Concat("Basic ", authToken.Base64Login);
-
-            // Execute request
-            var requestData = WebRequestService.GetWebRequest(request);
-
-            return requestData;
+            return apiAddress;
         }
+
       
 
         /// <summary>
@@ -87,12 +95,12 @@ namespace StatIt.Engine.Distimo.Services
             var time = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
             string data = String.Concat(queryString, time);
 
-            HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(DistimoPrivateKey));
+            HMACSHA1 hmac = new HMACSHA1(Encoding.ASCII.GetBytes(DistimoAuthService.DistimoPrivateKey));
             hmac.Initialize();
             byte[] buffer = Encoding.ASCII.GetBytes(data);
             string hash = BitConverter.ToString(hmac.ComputeHash(buffer)).Replace("-", "").ToLower();
 
-            string user = String.Concat(DistimoUserName, ":", DistimoPassword);
+            string user = String.Concat(DistimoAuthService.DistimoUserName, ":", DistimoAuthService.DistimoPassword);
             string base64Login = Convert.ToBase64String(Encoding.Default.GetBytes(user));
 
             return new DistimoAuthToken(hash, base64Login, time);
