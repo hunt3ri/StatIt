@@ -108,9 +108,5 @@ namespace StatIt.Engine.Distimo.Services
 
             return new DistimoAuthToken(hash, base64Login, time);
         }
-
-       
-
-
     }
 }

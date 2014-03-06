@@ -97,7 +97,7 @@ namespace StatIt.Tests.Distimo.Services
         }
 
         [Fact]
-        public void Distimo_Auth_Hash_Is_Generated()
+        public void Confirm_Basic_Authentication_Is_Being_Used()
         {
             // Arrange
             var distimoService = new DistimoService(MockWebRequestService.Object, MockDistimoAuthService.Object);
@@ -107,7 +107,7 @@ namespace StatIt.Tests.Distimo.Services
 
             // Assert - no point is unit testing the hash beyond this, integration testing will prove if hash
             // algorithm is correct.
-            Assert.NotNull(request.Headers["Authorization"]);
+            Assert.True(request.Headers["Authorization"].Contains("Basic"));
 
         }
     }
