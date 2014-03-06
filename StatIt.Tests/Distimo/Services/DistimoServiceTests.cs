@@ -70,7 +70,7 @@ namespace StatIt.Tests.Distimo.Services
         [Theory,
         InlineData("from=all&revenue=total&view=line&breakdown=application,appstore"),
         InlineData("from=2014-02-01&to=2014-02-28&revenue=total&view=line&breakdown=application,appstore,date&interval=week")]
-        public void Iain_Test(string queryString)
+        public void Check_Distimo_Request_Appends_Query_String(string queryString)
         {
             // Arrange
             var distimoService = new DistimoService(MockWebRequestService.Object, MockDistimoAuthService.Object);
@@ -78,7 +78,36 @@ namespace StatIt.Tests.Distimo.Services
             // Act
             var request = distimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, queryString);
 
+            // Assert
+            Assert.True(request.Address.Query.Contains(queryString));
 
+        }
+
+        [Fact]
+        public void Distimo_Request_Must_Always_Use_Json()
+        {
+            // Arrange
+            var distimoService = new DistimoService(MockWebRequestService.Object, MockDistimoAuthService.Object);
+
+            // Act
+            var request = distimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, String.Empty);
+
+            // Assert
+            Assert.True(request.Address.Query.Contains("format=json"));
+        }
+
+        [Fact]
+        public void Distimo_Auth_Hash_Is_Generated()
+        {
+            // Arrange
+            var distimoService = new DistimoService(MockWebRequestService.Object, MockDistimoAuthService.Object);
+
+            // Act
+            var request = distimoService.CreateDistimoRequest(SupportedDistimoApis.Revenues, String.Empty);
+
+            // Assert - no point is unit testing the hash beyond this, integration testing will prove if hash
+            // algorithm is correct.
+            Assert.NotNull(request.Headers["Authorization"]);
 
         }
     }

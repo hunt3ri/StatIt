@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace StatIt.Engine.Distimo.Services
 {
+    /// <summary>
+    /// Create correctly formatted authenticated webrequests for Distmo
+    /// </summary>
     public class DistimoService : IDistimoService
     {
         public string DistimoAPIBaseAddress = "https://analytics.distimo.com/api/v4/";
