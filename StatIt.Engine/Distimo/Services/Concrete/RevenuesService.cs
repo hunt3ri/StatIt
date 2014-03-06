@@ -22,15 +22,28 @@ namespace StatIt.Engine.Distimo.Services
 
         public RevenueModel GetRevenues(string AppId, DateTime StartDate, DateTime EndDate)
         {
-            // from=all&revenue=total&view=line&breakdown=application,appstore
-            //"from=all&revenue=total&view=line&breakdown=application,appstore,date&interval=week"
-
             // Round to nearest Monday so graph looks sane
+            // TODO - This increasingly looks like something we should do in JS in the frontend unfortunately :-(
             StartDate = GetNearestMonday(StartDate);
 
-            var revenueData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week");
-            // var revenueRequest = CreateDistimoRequest(DownloadAPI + "filters/assets/revenues", "");
+            var revsQueryString = BuildRevenuesQueryString(StartDate, EndDate);
 
+            //TODO - Pass thru appname from frontend
+            var filteredList = ExtractAppRevenueData("Winx Fairy School", revsQueryString);
+            var revenueModel = new RevenueModel(GetWeeklyRevenues(filteredList), StartDate);
+
+            return revenueModel;
+        }
+
+        public string BuildRevenuesQueryString(DateTime StartDate, DateTime EndDate)
+        {
+            var queryString = "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&view=line&breakdown=application,appstore,date&interval=week";
+            return queryString;
+        }
+
+        public List<dynamic> ExtractAppRevenueData(string appName, string queryString)
+        {
+            var revenueData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, queryString);
 
             var reader = new JsonReader();
             dynamic output = reader.Read(revenueData);
@@ -39,15 +52,13 @@ namespace StatIt.Engine.Distimo.Services
 
             foreach (dynamic line in output.lines)
             {
-                string appName = line.data.application;
+                string localAppName = line.data.application;
 
-                if (appName.Contains("Winx Fairy School"))
+                if (localAppName.Contains(appName))
                     filteredList.Add(line);
             }
 
-            var revenueModel = new RevenueModel(GetWeeklyRevenues(filteredList), StartDate);
-            //revenueModel.RevenueByWeek = GetWeeklyRevenues(filteredList);
-            return revenueModel;
+            return filteredList;
         }
 
         public RevenueModel GetIAPRevenues(string AppId, DateTime StartDate, DateTime EndDate)
@@ -55,15 +66,13 @@ namespace StatIt.Engine.Distimo.Services
             // Round to nearest Monday so graph looks sane
             StartDate = GetNearestMonday(StartDate);
 
-            // Sleep on thread so not hitting API with simulatenous requests  uthhrhhry
+            // Sleep on thread so not hitting API with simulatenous requests
 
             Thread.Sleep(1000);
 
             var appIds = GetApplicationIds();
 
             var iapIds = GetIAPIds(appIds);
-
-            //GetIAPData(StartDate, EndDate);
 
             var iapData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&metrics=in_app&view=line&breakdown=application,appstore,date&interval=week");
 
@@ -84,17 +93,7 @@ namespace StatIt.Engine.Distimo.Services
             return revenueModel;
         }
 
-        private void GetIAPData(DateTime StartDate, DateTime EndDate)
-        {
-            var iapData = DistimoService.GetDistimoData(SupportedDistimoApis.Revenues, "from=" + StartDate.ToString("yyyy-MM-dd") + "&to=" + EndDate.ToString("yyyy-MM-dd") + "&revenue=total&metrics=in_app&view=line&breakdown=application,appstore,date&interval=week");
 
-            var reader = new JsonReader();
-            dynamic rawAssetData = reader.Read(iapData);
-
-
-        
-        
-        }
 
         /// <summary>
         /// Get a list of all IAP ids that belong to one of the parent applications
@@ -164,7 +163,6 @@ namespace StatIt.Engine.Distimo.Services
                         dataPoints.Add(0); // add zeros instead of nulls to ensure no insanity with different number of datapoints later
                 }
 
-               // revenueModel.RawRevenueData.Add(AppStore, dataPoints);
                 revenueModel.AddRawRevenueData(AppStore, dataPoints, item.data.application);
 
                 // Calculate oldest date

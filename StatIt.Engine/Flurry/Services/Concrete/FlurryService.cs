@@ -40,17 +40,15 @@ namespace StatIt.Engine.Flurry.Services
 
         public DAUDisplayModel GetActiveUsers(DateTime DateStart, DateTime DateEnd)
         {
-
+            // Get DAU data for iOS devices
             var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode, DateStart, DateEnd);
-
             var iosModelData = PopulateModel(iosDauData, new Dictionary<string,DailyActiveUsersModel>(), true);
 
+            // Get DAU data for Android devices
             var androidDauData = CreateFlurryActiveUsersRequest(WFSAndroidCode, DateStart, DateEnd);
-
             var modelData = PopulateModel(androidDauData, iosModelData, false);
 
             var displayModel = new DAUDisplayModel(modelData);
-
             return displayModel;
         }
 
