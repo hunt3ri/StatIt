@@ -419,3 +419,4 @@
 /// <reference path="locales/bootstrap-datepicker.ar.js" />
 /// <reference path="bootstrap-datepicker.js" />
 /// <reference path="statit/distimoiapworker.js" />
+/// <reference path="statit/flurrydauworker.js" />

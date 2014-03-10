@@ -43,28 +43,7 @@
         });
     }
 
-    function RefreshIAPData(dateStart, dateEnd, callback)
-    {
-        $.ajax({
-            url: '/Home/GetIAPRevenues?appId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
-            //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
-            beforeSend: function () {
-                $('#iapLoader').show();
-                $('#iapWeekChart').hide();
-            },
-            complete: function () {
-                $('#iapLoader').hide();
-            }
-        })
-        .done(function (data) {
-            $('#iapWeekChart').show();
-            callback(data);
-        })
-        .error(function () {
-            $('#target').append('Failed');
-        });
-    }
-
+    
     function RefreshDauData(dateStart, dateEnd, callback)
     {
         $.ajax({
@@ -118,13 +97,19 @@
             });
         }
 
-        // Setup IAP worker
+        // Init Distimo IAP worker
         var iapWorker = new Worker("./Scripts/StatIt/DistimoIAPWorker.js");
         iapWorker.onmessage = function (e) {
             $('#iapLoader').hide();
             self.iapRevenues(e.data.RevenueByWeek);
             self.iapGrossRevenue(e.data.GrossRevenue);
             self.iapShareRevenue((e.data.GrossRevenue * 0.7).toFixed(2));
+        }
+
+        // Init Flurry DAU Worker
+        var dauWorker = new Worker("./Scripts/StatIt/FlurryDAUWorker.js");
+        iapWorker.onmessage = function (e) {
+            self.dau(data.DailyActiveUsers);
         }
 
         var revFunction = function () {
@@ -142,8 +127,9 @@
             });
 
             iapWorker.postMessage(iapDates);
+            dauWorker.postMessage(iapDates);
 
-            dauFunction.call();
+            //dauFunction.call();
 
            
         };

@@ -8,8 +8,8 @@ self.onmessage = function RefreshIAPData(event) {
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
-            var iapData = JSON.parse(xhr.responseText);
-            self.postMessage(iapData);
+            var dauData = JSON.parse(xhr.responseText);
+            self.postMessage(dauData);
         }
     }
 
