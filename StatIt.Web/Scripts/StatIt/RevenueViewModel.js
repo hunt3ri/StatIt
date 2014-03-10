@@ -87,6 +87,8 @@
         });
     }
 
+   
+
     function RevenuesViewModel() {
 
         var self = this;
@@ -109,37 +111,15 @@
 
         self.dau = ko.observableArray();
 
-        var iapFunction = function () {
-
-            //RefreshIAPData(self.dateStart(), self.dateEnd(), function (data) {
-            //    self.iapRevenues(data.RevenueByWeek);
-            //    self.iapGrossRevenue(data.GrossRevenue);
-            //    self.iapShareRevenue((data.GrossRevenue * 0.7).toFixed(2));
-            //});
-
-
-
-        }
-
+   
         var dauFunction = function () {
             RefreshDauData(self.dateStart(), self.dateEnd(), function (data) {
                 self.dau(data.DailyActiveUsers);
             });
         }
 
-        var revFunction = function () {
-            RefreshData(self.dateStart(), self.dateEnd(), function (data) {
-                self.revenues(data.RevenueByWeek);
-                self.dateStart(data.StartDate);
-                self.grossRevenue(data.GrossRevenue);
-                self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
-            });
-
-            //iapFunction.call();
-            dauFunction.call();
-        };
-
-        var iapWorker = new Worker("./Scripts/StatIt/GetDistimoIAPData.js");
+        // Setup IAP worker
+        var iapWorker = new Worker("./Scripts/StatIt/DistimoIAPWorker.js");
         iapWorker.onmessage = function (e) {
             $('#iapLoader').hide();
             self.iapRevenues(e.data.RevenueByWeek);
@@ -147,21 +127,31 @@
             self.iapShareRevenue((e.data.GrossRevenue * 0.7).toFixed(2));
         }
 
-        iapDates = {
-            dateStart: self.dateStart(),
-            dateEnd: self.dateEnd()
+        var revFunction = function () {
+
+            iapDates = {
+                dateStart: self.dateStart(),
+                dateEnd: self.dateEnd()
+            };
+
+            RefreshData(self.dateStart(), self.dateEnd(), function (data) {
+                self.revenues(data.RevenueByWeek);
+                self.dateStart(data.StartDate);
+                self.grossRevenue(data.GrossRevenue);
+                self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
+            });
+
+            iapWorker.postMessage(iapDates);
+
+            dauFunction.call();
+
+           
         };
-
-        iapWorker.postMessage(iapDates);
-
-        var xhr = new XMLHttpRequest();
-
-
+  
         // Click handler for refresh button
         self.refreshData = revFunction;
 
         // Init graphs with default values
-        //iapFunction.call();
         revFunction.call();
 
     }
