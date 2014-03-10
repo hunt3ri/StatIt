@@ -549,6 +549,7 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\StatIt\DistimoIAPWorker.js" />
     <Content Include="Scripts\StatIt\FlurryDAUWorker.js" />
+    <Content Include="Scripts\StatIt\DistimoDownloadWorker.js" />
     <Content Include="Scripts\StatIt\RevenueViewModel.js" />
     <Content Include="Web.config" />
   </ItemGroup>

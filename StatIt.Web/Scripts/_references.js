@@ -420,3 +420,4 @@
 /// <reference path="bootstrap-datepicker.js" />
 /// <reference path="statit/distimoiapworker.js" />
 /// <reference path="statit/flurrydauworker.js" />
+/// <reference path="statit/distimodownloadworker.js" />

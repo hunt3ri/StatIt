@@ -21,59 +21,9 @@
         return today;
     }
 
-    function RefreshData(dateStart, dateEnd, callback)
-    {
-        $.ajax({
-            url: '/Home/GetRevenues?appId=FairySchool&dateStart=' + dateStart + '&dateEnd=' + dateEnd,
-             //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
-            beforeSend: function () {
-                $('#loading').show();
-                $('#chartContainer').hide();
-            },
-            complete: function () {
-                $('#loading').hide();
-            }
-        })
-        .done(function (data) {
-            $('#chartContainer').show();
-            callback(data);
-        })
-        .error(function () {
-            $('#target').append('Failed');
-        });
-    }
-
-    
-    function RefreshDauData(dateStart, dateEnd, callback)
-    {
-        $.ajax({
-            url: '/Home/GetDAU?dateStart=' + dateStart + '&dateEnd=' + dateEnd,
-            //url: '/Home/GetRevenues?from=all&revenue=total&view=line&breakdown=application,appstore',
-            beforeSend: function () {
-               // $('#iapLoader').show();
-               // $('#iapWeekChart').hide();
-            },
-            complete: function () {
-               // $('#iapLoader').hide();
-            }
-        })
-        .done(function (data) {
-           // $('#iapWeekChart').show();
-            callback(data);
-        })
-        .error(function () {
-            $('#target').append('Failed');
-        });
-    }
-
-   
-
     function RevenuesViewModel() {
 
         var self = this;
-
-        self.myMessage = ko.observable();
-        self.myMessage('Test');
 
         // Get default values showing last 6 weeks worth of data
         var toDate = GetDate(0);
@@ -90,13 +40,6 @@
 
         self.dau = ko.observableArray();
 
-   
-        var dauFunction = function () {
-            RefreshDauData(self.dateStart(), self.dateEnd(), function (data) {
-                self.dau(data.DailyActiveUsers);
-            });
-        }
-
         // Init Distimo IAP worker
         var iapWorker = new Worker("./Scripts/StatIt/DistimoIAPWorker.js");
         iapWorker.onmessage = function (e) {
@@ -106,32 +49,33 @@
             self.iapShareRevenue((e.data.GrossRevenue * 0.7).toFixed(2));
         }
 
+        // Init Distimo Download worker
+        var downloadWorker = new Worker("./Scripts/StatIt/DistimoDownloadWorker.js");
+        downloadWorker.onmessage = function (e) {
+            self.revenues(e.data.RevenueByWeek);
+            self.dateStart(e.data.StartDate);
+            self.grossRevenue(e.data.GrossRevenue);
+            self.shareRevenue((e.data.GrossRevenue * 0.7).toFixed(2));
+        }
+
         // Init Flurry DAU Worker
         var dauWorker = new Worker("./Scripts/StatIt/FlurryDAUWorker.js");
-        iapWorker.onmessage = function (e) {
-            self.dau(data.DailyActiveUsers);
+        dauWorker.onmessage = function (e) {
+            self.dau(e.data.DailyActiveUsers);
         }
+
 
         var revFunction = function () {
 
+            // Creat object with currently selected dates
             iapDates = {
                 dateStart: self.dateStart(),
                 dateEnd: self.dateEnd()
             };
 
-            RefreshData(self.dateStart(), self.dateEnd(), function (data) {
-                self.revenues(data.RevenueByWeek);
-                self.dateStart(data.StartDate);
-                self.grossRevenue(data.GrossRevenue);
-                self.shareRevenue((data.GrossRevenue * 0.7).toFixed(2));
-            });
-
             iapWorker.postMessage(iapDates);
             dauWorker.postMessage(iapDates);
-
-            //dauFunction.call();
-
-           
+            downloadWorker.postMessage(iapDates);
         };
   
         // Click handler for refresh button
