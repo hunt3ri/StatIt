@@ -110,11 +110,15 @@
         self.dau = ko.observableArray();
 
         var iapFunction = function () {
-            RefreshIAPData(self.dateStart(), self.dateEnd(), function (data) {
-                self.iapRevenues(data.RevenueByWeek);
-                self.iapGrossRevenue(data.GrossRevenue);
-                self.iapShareRevenue((data.GrossRevenue * 0.7).toFixed(2));
-            });
+
+            //RefreshIAPData(self.dateStart(), self.dateEnd(), function (data) {
+            //    self.iapRevenues(data.RevenueByWeek);
+            //    self.iapGrossRevenue(data.GrossRevenue);
+            //    self.iapShareRevenue((data.GrossRevenue * 0.7).toFixed(2));
+            //});
+
+
+
         }
 
         var dauFunction = function () {
@@ -134,6 +138,24 @@
             //iapFunction.call();
             dauFunction.call();
         };
+
+        var iapWorker = new Worker("./Scripts/StatIt/GetDistimoIAPData.js");
+        iapWorker.onmessage = function (e) {
+            $('#iapLoader').hide();
+            self.iapRevenues(e.data.RevenueByWeek);
+            self.iapGrossRevenue(e.data.GrossRevenue);
+            self.iapShareRevenue((e.data.GrossRevenue * 0.7).toFixed(2));
+        }
+
+        iapDates = {
+            dateStart: self.dateStart(),
+            dateEnd: self.dateEnd()
+        };
+
+        iapWorker.postMessage(iapDates);
+
+        var xhr = new XMLHttpRequest();
+
 
         // Click handler for refresh button
         self.refreshData = revFunction;
