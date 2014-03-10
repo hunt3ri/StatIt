@@ -21,6 +21,19 @@
         return today;
     }
 
+    /*
+     * Helper function to hide charts and show loaders when data is being refreshed.
+     */
+    function HideChartsShowLoaders() {
+        $('#downloadChart').hide();
+        $('#iapWeekChart').hide();
+        $('#dauChart').hide();
+
+        $('#downloadLoader').show();
+        $('#iapLoader').show();
+        $('#dauLoader').show();
+    }
+
     function RevenuesViewModel() {
 
         var self = this;
@@ -44,6 +57,7 @@
         var iapWorker = new Worker("./Scripts/StatIt/DistimoIAPWorker.js");
         iapWorker.onmessage = function (e) {
             $('#iapLoader').hide();
+            $('#iapWeekChart').show();
             self.iapRevenues(e.data.RevenueByWeek);
             self.iapGrossRevenue(e.data.GrossRevenue);
             self.iapShareRevenue((e.data.GrossRevenue * 0.7).toFixed(2));
@@ -52,6 +66,8 @@
         // Init Distimo Download worker
         var downloadWorker = new Worker("./Scripts/StatIt/DistimoDownloadWorker.js");
         downloadWorker.onmessage = function (e) {
+            $('#downloadLoader').hide();
+            $('#downloadChart').show();
             self.revenues(e.data.RevenueByWeek);
             self.dateStart(e.data.StartDate);
             self.grossRevenue(e.data.GrossRevenue);
@@ -61,11 +77,15 @@
         // Init Flurry DAU Worker
         var dauWorker = new Worker("./Scripts/StatIt/FlurryDAUWorker.js");
         dauWorker.onmessage = function (e) {
+            $('#dauLoader').hide();
+            $('#dauChart').show();
             self.dau(e.data.DailyActiveUsers);
         }
 
 
         var revFunction = function () {
+
+            HideChartsShowLoaders();
 
             // Creat object with currently selected dates
             iapDates = {
