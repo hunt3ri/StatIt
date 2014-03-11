@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StatIt.Engine.Flurry.Services.Models
 {
-    public class DailyActiveUsersModel
+    public class FlurryUsersModel
     {
-        public string DAUDate { get; set; }
+        public string RecordDate { get; set; }
         public int iOSUsers { get; set; }
         public int AndroidUsers { get; set; }
     }

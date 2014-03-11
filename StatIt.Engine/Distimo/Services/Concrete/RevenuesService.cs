@@ -1,4 +1,5 @@
 ﻿using JsonFx.Json;
+using Microsoft.CSharp.RuntimeBinder;
 using StatIt.Engine.Distimo.Services;
 using StatIt.Engine.Distimo.Services.Models;
 using StatIt.Engine.Web.Services;
@@ -50,12 +51,21 @@ namespace StatIt.Engine.Distimo.Services
 
             List<dynamic> filteredList = new List<dynamic>();
 
-            foreach (dynamic line in output.lines)
+            try
             {
-                string localAppName = line.data.application;
+                foreach (dynamic line in output.lines)
+                {
+                    string localAppName = line.data.application;
 
-                if (localAppName.Contains(appName))
-                    filteredList.Add(line);
+                    if (localAppName.Contains(appName))
+                        filteredList.Add(line);
+                }
+            }
+            catch (RuntimeBinderException)
+            {
+                // too many requests, try again
+                Thread.Sleep(1100);
+                return ExtractAppRevenueData(appName, queryString);
             }
 
             return filteredList;
@@ -68,7 +78,7 @@ namespace StatIt.Engine.Distimo.Services
 
             // Sleep on thread so not hitting API with simulatenous requests
 
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
 
             var appIds = GetApplicationIds();
 

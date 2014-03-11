@@ -80,12 +80,12 @@
         dauWorker.onmessage = function (e) {
             $('#dauLoader').hide();
             $('#dauChart').show();
-            self.dau(e.data.DailyActiveUsers);
+            self.dau(e.data.FlurryUserData);
         }
 
         var newUsersWorker = new Worker("./Scripts/StatIt/FlurryNewUsersWorker.js");
         newUsersWorker.onmessage = function (e) {
-            self.newUsers(e.data.DailyActiveUsers);
+            self.newUsers(e.data.FlurryUserData);
         }
 
 
