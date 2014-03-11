@@ -28,10 +28,12 @@
         $('#downloadChart').hide();
         $('#iapWeekChart').hide();
         $('#dauChart').hide();
+        $('#newUsersChart').hide();
 
         $('#downloadLoader').show();
         $('#iapLoader').show();
         $('#dauLoader').show();
+        $('#newUsersLoader').show();
     }
 
     function RevenuesViewModel() {
@@ -85,6 +87,8 @@
 
         var newUsersWorker = new Worker("./Scripts/StatIt/FlurryNewUsersWorker.js");
         newUsersWorker.onmessage = function (e) {
+            $('#newUsersLoader').hide();
+            $('#newUsersChart').show();
             self.newUsers(e.data.FlurryUserData);
         }
 

@@ -151,7 +151,11 @@
 
     <div class="col-md-6">
 
-        <div id="dauChart" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+        <div id="newUsersLoader">
+            <img src="/Content/images/ajax-loader.gif" />
+        </div>
+
+        <div id="newUsersChart" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
     dataSource: newUsers,
     commonSeriesSettings: {
         argumentField: 'RecordDate',

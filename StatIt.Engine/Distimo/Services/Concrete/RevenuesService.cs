@@ -141,12 +141,20 @@ namespace StatIt.Engine.Distimo.Services
 
             var applicationIds = new List<string>();
 
-            foreach (dynamic line in apps.lines)
+            try
             {
-                 string appName = line.data.application;
+                foreach (dynamic line in apps.lines)
+                {
+                    string appName = line.data.application;
 
-                 if (appName.Contains("Winx Fairy School"))
-                     applicationIds.Add(line.data.application_id);
+                    if (appName.Contains("Winx Fairy School"))
+                        applicationIds.Add(line.data.application_id);
+                }
+            }
+            catch (RuntimeBinderException)
+            {
+                Thread.Sleep(1100);
+                return GetApplicationIds(); // try again if timeout occurred
             }
 
             return applicationIds;  
