@@ -421,3 +421,4 @@
 /// <reference path="statit/distimoiapworker.js" />
 /// <reference path="statit/flurrydauworker.js" />
 /// <reference path="statit/distimodownloadworker.js" />
+/// <reference path="statit/flurrynewusersworker.js" />

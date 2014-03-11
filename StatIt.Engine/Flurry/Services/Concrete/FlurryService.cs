@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace StatIt.Engine.Flurry.Services
@@ -27,34 +28,47 @@ namespace StatIt.Engine.Flurry.Services
             WFSAndroidCode = APIKeys.FlurryWFSAndroidKey;
         }
 
-        public void GetMAU()
+        public DAUDisplayModel GetNewUsers(DateTime DateStart, DateTime DateEnd)
         {
-            var DateStart = DateTime.Now;
-            DateStart = DateStart.AddDays(-30);
+            Thread.Sleep(1000);
+            var iosNewUsers = CreateFlurryActiveUsersRequest("NewUsers", WFSiOSCode, DateStart, DateEnd);
+            var iosModelData = PopulateModel(iosNewUsers, new Dictionary<string,DailyActiveUsersModel>(), true);
+            Thread.Sleep(1100);
 
-            var DateEnd = DateTime.Now;
+            // Get DAU data for Android devices
+            var androidNewUsers = CreateFlurryActiveUsersRequest("NewUsers", WFSAndroidCode, DateStart, DateEnd);
+            var modelData = PopulateModel(androidNewUsers, iosModelData, false);
 
+            var displayModel = new DAUDisplayModel(modelData);
+            return displayModel;
+        }
 
-            var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode, DateStart, DateEnd);
+        public void GetMAU(DateTime DateStart, DateTime DateEnd)
+        {
+            // TODO - Initial work on MAU, it would need to work seperately from others.
+            var iosDauData = CreateFlurryActiveUsersRequest("ActiveUsersByMonth", WFSiOSCode, DateStart, DateEnd);
+
         }
 
         public DAUDisplayModel GetActiveUsers(DateTime DateStart, DateTime DateEnd)
         {
+            
             // Get DAU data for iOS devices
-            var iosDauData = CreateFlurryActiveUsersRequest(WFSiOSCode, DateStart, DateEnd);
+            var iosDauData = CreateFlurryActiveUsersRequest("ActiveUsers", WFSiOSCode, DateStart, DateEnd);
             var iosModelData = PopulateModel(iosDauData, new Dictionary<string,DailyActiveUsersModel>(), true);
 
+            Thread.Sleep(1100);
             // Get DAU data for Android devices
-            var androidDauData = CreateFlurryActiveUsersRequest(WFSAndroidCode, DateStart, DateEnd);
+            var androidDauData = CreateFlurryActiveUsersRequest("ActiveUsers", WFSAndroidCode, DateStart, DateEnd);
             var modelData = PopulateModel(androidDauData, iosModelData, false);
 
             var displayModel = new DAUDisplayModel(modelData);
             return displayModel;
         }
 
-        private dynamic CreateFlurryActiveUsersRequest(string APIKey, DateTime DateStart, DateTime DateEnd)
+        private dynamic CreateFlurryActiveUsersRequest(string MetricName, string APIKey, DateTime DateStart, DateTime DateEnd)
         {
-            var url = "http://api.flurry.com/appMetrics/ActiveUsers?apiAccessCode=" + FlurryAPIAccessCode + "&apiKey=" + APIKey + "&startDate=" + DateStart.ToString("yyyy-MM-dd") + "&endDate=" + DateEnd.ToString("yyyy-MM-dd");
+            var url = "http://api.flurry.com/appMetrics/" + MetricName + "?apiAccessCode=" + FlurryAPIAccessCode + "&apiKey=" + APIKey + "&startDate=" + DateStart.ToString("yyyy-MM-dd") + "&endDate=" + DateEnd.ToString("yyyy-MM-dd");
 
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
             request.Accept = "application/json";

@@ -19,10 +19,12 @@ namespace StatIt.Web.Controllers
             RevenuesService = revenuesService;
             FlurryService = flurryService;
         }
+
         //
         // GET: /Home/
         public ActionResult Index()
         {
+           // FlurryService.GetNewUsers(DateTime.Now.AddDays(-30), DateTime.Now);
             return View();
         }
 
@@ -35,6 +37,21 @@ namespace StatIt.Web.Controllers
 
 
             var dauData = FlurryService.GetActiveUsers(dateStart, dateEnd);
+
+            var jsonData = Json(dauData, JsonRequestBehavior.AllowGet);
+
+            return jsonData;
+        }
+
+        public JsonResult GetNewUsers(string DateStart, string DateEnd)
+        {
+            var dateStart = DateTime.ParseExact(DateStart, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+            var dateEnd = DateTime.ParseExact(DateEnd, "dd/MM/yyyy",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+
+
+            var dauData = FlurryService.GetNewUsers(dateStart, dateEnd);
 
             var jsonData = Json(dauData, JsonRequestBehavior.AllowGet);
 
@@ -68,15 +85,5 @@ namespace StatIt.Web.Controllers
 
             return jsonData;
         }
-
-        //public JsonResult GetDownloads()
-        //{
-        //    var downloadData = DistimoService.GetDownloads();
-
-        //    var jsonData = Json(downloadData, JsonRequestBehavior.AllowGet);
-
-        //    return jsonData;
-            
-        //}
     }
 }

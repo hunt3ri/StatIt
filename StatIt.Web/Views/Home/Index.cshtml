@@ -149,7 +149,31 @@
     }}"></div>
     </div>
 
-</div>
+    <div class="col-md-6">
+
+        <div id="dauChart" style="height:500px; max-width:700px; margin: 0 auto" data-bind="dxChart: {
+    dataSource: newUsers,
+    commonSeriesSettings: {
+        argumentField: 'DAUDate',
+        type: 'stackedArea',
+        label: {
+            visible: false,
+            showForZeroValues: false
+        }
+    },
+    series: [
+        { valueField: 'iOSUsers', name: 'iOS' },
+        { valueField: 'AndroidUsers', name: 'Android' }
+    ],
+    legend: {
+        verticalAlignment: 'bottom',
+        horizontalAlignment: 'center'
+    },
+    title: {
+        text: 'New Users'
+    }}"></div>
+    </div>
+ </div>
 
     @section Scripts {
         <script src="/Scripts/StatIt/RevenueViewModel.js"></script>

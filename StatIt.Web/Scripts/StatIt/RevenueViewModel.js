@@ -52,6 +52,7 @@
         self.shareRevenue = ko.observable();
 
         self.dau = ko.observableArray();
+        self.newUsers = ko.observableArray();
 
         // Init Distimo IAP worker
         var iapWorker = new Worker("./Scripts/StatIt/DistimoIAPWorker.js");
@@ -82,6 +83,11 @@
             self.dau(e.data.DailyActiveUsers);
         }
 
+        var newUsersWorker = new Worker("./Scripts/StatIt/FlurryNewUsersWorker.js");
+        newUsersWorker.onmessage = function (e) {
+            self.newUsers(e.data.DailyActiveUsers);
+        }
+
 
         var revFunction = function () {
 
@@ -96,6 +102,7 @@
             iapWorker.postMessage(iapDates);
             dauWorker.postMessage(iapDates);
             downloadWorker.postMessage(iapDates);
+            newUsersWorker.postMessage(iapDates);
         };
   
         // Click handler for refresh button
